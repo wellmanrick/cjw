@@ -211,11 +211,28 @@
 /* --- Running screen --- */
 
 .runningScreen {
+  position: relative;
   align-items: center;
   justify-content: center;
   gap: var(--space-4);
   touch-action: none;
   overflow: hidden;
+}
+
+.runningMute {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + var(--space-3));
+  right: calc(env(safe-area-inset-right) + var(--space-3));
+  width: var(--touch-target);
+  height: var(--touch-target);
+  border-radius: 50%;
+  background: var(--color-surface);
+  box-shadow: 0 2px 6px var(--color-shadow);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
 }
 
 .remainingLabel {

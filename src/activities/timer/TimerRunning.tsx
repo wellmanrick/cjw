@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { HoldButton } from '../../components/HoldButton';
+import { playTick } from '../../lib/sound';
 import { useWakeLock } from '../../lib/useWakeLock';
 import { CountdownRing } from './CountdownRing';
 import { HidingScene } from './HidingScene';
@@ -9,6 +11,8 @@ interface Props {
   characterId: string;
   progress: number;
   remainingMs: number;
+  muted: boolean;
+  onToggleMute: () => void;
   onCancel: () => void;
 }
 
@@ -23,12 +27,37 @@ function formatRemaining(ms: number): string {
   return `${minutes}:${String(seconds).padStart(2, '0')}`;
 }
 
-export function TimerRunning({ characterId, progress, remainingMs, onCancel }: Props) {
+export function TimerRunning({
+  characterId,
+  progress,
+  remainingMs,
+  muted,
+  onToggleMute,
+  onCancel,
+}: Props) {
   useWakeLock(true);
   const lastTen = remainingMs <= 10_000;
 
+  // Tick-tock once per second while counting down.
+  const secondsLeft = Math.ceil(remainingMs / 1000);
+  const prevSecondsRef = useRef(secondsLeft);
+  useEffect(() => {
+    if (secondsLeft !== prevSecondsRef.current) {
+      prevSecondsRef.current = secondsLeft;
+      playTick(secondsLeft <= 10);
+    }
+  }, [secondsLeft]);
+
   return (
     <div className={`screen ${styles.runningScreen}`}>
+      <button
+        type="button"
+        className={styles.runningMute}
+        onClick={onToggleMute}
+        aria-label={muted ? 'Unmute' : 'Mute'}
+      >
+        {muted ? '🔇' : '🔊'}
+      </button>
       <CountdownRing progress={progress} pulsing={lastTen}>
         <HidingScene
           characterId={characterId}
