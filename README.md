@@ -17,7 +17,9 @@ A Hatch-style visual countdown for little ones who can't read clocks yet:
   out when time is up
 - Photos you upload hide in a gift box that bursts open
 - A "?" tile picks a surprise character at random each round
-- A gentle tick-tock while counting down (brighter in the last 10 seconds)
+- A gentle tick-tock while counting down (brighter in the last 10 seconds) —
+  unless the school bus is counting down, which sings "The Wheels on the
+  Bus" on loop instead (it hides in a garage)
 - Confetti + a pop-and-chime celebration when time is up (mute toggle on
   both the setup and running screens)
 - Parent-friendly: preset buttons (1/2/5/10/15 min) or custom minutes/seconds
