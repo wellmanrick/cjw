@@ -1,0 +1,17 @@
+{
+  "name": "Toddler Time",
+  "short_name": "Toddler Time",
+  "description": "Fun visual timers and activities for toddlers",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fef6e4",
+  "theme_color": "#fef6e4",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+:root {
+  --color-bg: #fef6e4;
+  --color-surface: #ffffff;
+  --color-text: #3d2c29;
+  --color-text-soft: #8a7a72;
+  --color-primary: #f582ae;
+  --color-primary-dark: #d9608c;
+  --color-accent: #8bd3dd;
+  --color-go: #4cc26b;
+  --color-stop: #e85d4a;
+  --color-shadow: rgba(61, 44, 41, 0.15);
+
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+
+  --touch-target: 48px;
+
+  --font-display: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', system-ui, sans-serif;
+}
