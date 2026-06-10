@@ -9,6 +9,7 @@ export type SpotId =
   | 'bush'
   | 'barn'
   | 'doghouse'
+  | 'garage'
   | 'mud'
   | 'box'
   | 'gift';
@@ -143,6 +144,26 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
         <path d="M 21 62 L 50 44 L 79 62" stroke="#8a5a3b" strokeWidth="7" fill="none" strokeLinecap="round" />
         <path d="M 38 92 L 38 74 A 12 12 0 0 1 62 74 L 62 92 Z" fill="#5c4033" />
         <circle cx="50" cy="56" r="4" fill="#8a5a3b" />
+      </svg>
+    ),
+  },
+  garage: {
+    name: 'Garage',
+    reveal: 'above',
+    front: (
+      <svg {...svgProps}>
+        <ellipse cx="50" cy="93" rx="42" ry="4" fill="rgba(61,44,41,0.08)" />
+        <rect x="16" y="56" width="68" height="36" rx="3" fill="#8ecae6" />
+        <path d="M 10 58 L 50 42 L 90 58 L 86 62 L 50 48 L 14 62 Z" fill="#4a6fa5" />
+        <rect x="26" y="64" width="48" height="28" rx="2" fill="#3d405b" />
+        <g stroke="#5a5e85" strokeWidth="2">
+          <line x1="26" y1="71" x2="74" y2="71" />
+          <line x1="26" y1="78" x2="74" y2="78" />
+          <line x1="26" y1="85" x2="74" y2="85" />
+        </g>
+        <g stroke="#fff" strokeWidth="2" strokeDasharray="5 4" opacity="0.7">
+          <line x1="4" y1="92" x2="96" y2="92" />
+        </g>
       </svg>
     ),
   },

@@ -65,3 +65,50 @@ export function playTick(urgent = false) {
   const frequency = urgent ? (tickTock ? 1318.5 : 987.8) : (tickTock ? 880 : 659.25);
   playNote(frequency, ctx.currentTime, 0.07, urgent ? 0.08 : 0.035);
 }
+
+/* --- "The Wheels on the Bus" (traditional) — looped countdown song --- */
+
+const F4 = 349.23, G4 = 392.0, A4 = 440.0, C4 = 261.63, C5 = 523.25, E4 = 329.63;
+/** [frequency (0 = rest), beats] */
+const BUS_MELODY: Array<[number, number]> = [
+  // The wheels on the bus go round and round
+  [C4, 1], [F4, 1], [F4, 1], [F4, 1], [F4, 1], [A4, 1], [C5, 1], [A4, 1], [F4, 2],
+  // round and round
+  [G4, 1], [E4, 1], [C4, 2],
+  // round and round
+  [A4, 1], [F4, 1], [C4, 2],
+  // The wheels on the bus go round and round
+  [C4, 1], [F4, 1], [F4, 1], [F4, 1], [F4, 1], [A4, 1], [C5, 1], [A4, 1], [F4, 2],
+  // all through the town
+  [G4, 1], [A4, 1], [G4, 1], [F4, 3],
+  // breath before looping
+  [0, 4],
+];
+const BUS_BEAT_MS = 320;
+
+let busSongActive = false;
+let busNoteIndex = 0;
+let busNoteTimeout = 0;
+
+function scheduleNextBusNote() {
+  if (!busSongActive) return;
+  const [frequency, beats] = BUS_MELODY[busNoteIndex];
+  busNoteIndex = (busNoteIndex + 1) % BUS_MELODY.length;
+  if (frequency > 0 && !muted && ctx) {
+    playNote(frequency, ctx.currentTime, (beats * BUS_BEAT_MS * 0.9) / 1000, 0.08);
+  }
+  busNoteTimeout = window.setTimeout(scheduleNextBusNote, beats * BUS_BEAT_MS);
+}
+
+/** Loop the song quietly; notes respect the mute toggle as they play. */
+export function startBusSong() {
+  if (busSongActive) return;
+  busSongActive = true;
+  busNoteIndex = 0;
+  scheduleNextBusNote();
+}
+
+export function stopBusSong() {
+  busSongActive = false;
+  window.clearTimeout(busNoteTimeout);
+}

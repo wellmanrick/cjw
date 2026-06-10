@@ -246,7 +246,41 @@ function CatHead({ mood }: { mood: Mood }) {
   );
 }
 
+/** School bus with a friendly face — sings "The Wheels on the Bus" while counting down. */
+function Bus({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      {/* body */}
+      <rect x="8" y="34" width="84" height="46" rx="9" fill="#ffb703" />
+      <rect x="8" y="34" width="84" height="10" rx="5" fill="#ffd166" />
+      {/* windows */}
+      <rect x="16" y="42" width="16" height="14" rx="3" fill="#cdeefd" stroke="#e09f00" strokeWidth="1.5" />
+      <rect x="64" y="42" width="20" height="16" rx="3" fill="#cdeefd" stroke="#e09f00" strokeWidth="1.5" />
+      {/* stripe */}
+      <rect x="8" y="62" width="84" height="5" fill="#e09f00" />
+      {/* lights + stop sign */}
+      <circle cx="89" cy="72" r="3" fill="#ffd166" stroke="#e09f00" strokeWidth="1.5" />
+      <circle cx="11" cy="72" r="3" fill="#e85d4a" />
+      <rect x="6" y="46" width="7" height="9" rx="2" fill="#e85d4a" />
+      {/* wheels */}
+      <circle cx="28" cy="80" r="9.5" fill="#3d2c29" />
+      <circle cx="72" cy="80" r="9.5" fill="#3d2c29" />
+      <circle cx="28" cy="80" r="4.5" fill="#9a8c98" />
+      <circle cx="72" cy="80" r="4.5" fill="#9a8c98" />
+      {/* face on the side */}
+      <Cheeks cx={48} cy={50} color="#f4845f" />
+      <Face mood={mood} cx={48} cy={50} />
+    </svg>
+  );
+}
+
 export const builtinCharacters: BuiltinCharacter[] = [
+  {
+    id: 'builtin:bus',
+    name: 'School bus',
+    spot: 'garage',
+    render: (mood) => <Bus mood={mood} />,
+  },
   {
     id: 'builtin:bunny',
     name: 'Bunny',
