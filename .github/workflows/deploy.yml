@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      # Temporary: deploy from the feature branch until it merges.
-      - claude/toddler-app-timer-6m1xci
   workflow_dispatch:
 
 permissions:

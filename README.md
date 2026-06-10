@@ -10,9 +10,13 @@ runs entirely in the browser — no backend, no accounts.
 A Hatch-style visual countdown for little ones who can't read clocks yet:
 
 - A big ring drains and shifts green → red as time runs out
-- A friendly animal (bunny, bear, frog, fox, or duck) — or a photo you
-  upload — sits in the middle and gets more excited as the end nears
-- Confetti + a cheerful chime when time is up (mute toggle included)
+- The surprise: each character hides in its home during the countdown —
+  chick in an egg, frog in a pond, cow behind the barn, bunny in a magic
+  hat, bear in a cave, fox in a bush — peeking out now and then, and pops
+  out when time is up
+- Photos you upload hide in a gift box that bursts open
+- A "?" tile picks a surprise character at random each round
+- Confetti + a pop-and-chime celebration when time is up (mute toggle included)
 - Parent-friendly: preset buttons (1/2/5/10/15 min) or custom minutes/seconds
 - Toddler-proof: while running, the only control is a 2-second hold-to-stop
 - Keeps the phone screen awake during a countdown, and stays accurate even

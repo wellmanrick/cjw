@@ -1,12 +1,15 @@
 /* eslint-disable react-refresh/only-export-components -- this file is a data
    registry of characters; the SVG components are implementation details. */
 import type { ReactNode } from 'react';
+import type { SpotId } from './hidingSpots';
 
 export type Mood = 'happy' | 'excited' | 'party';
 
 export interface BuiltinCharacter {
   id: string;
   name: string;
+  /** Where this character hides during the countdown. */
+  spot: SpotId;
   render: (mood: Mood) => ReactNode;
 }
 
@@ -135,12 +138,46 @@ function Duck({ mood }: { mood: Mood }) {
   );
 }
 
+function Chick({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <path d="M 46 14 q 4 -8 8 0" stroke="#f7b733" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <circle cx="50" cy="56" r="33" fill="#ffe066" />
+      <ellipse cx="22" cy="62" rx="9" ry="14" fill="#ffd43b" transform="rotate(20 22 62)" />
+      <ellipse cx="78" cy="62" rx="9" ry="14" fill="#ffd43b" transform="rotate(-20 78 62)" />
+      <path d="M 44 62 L 50 70 L 56 62 Z" fill="#f7913d" />
+      <Cheeks cx={50} cy={54} color="#f7913d" />
+      <Face mood={mood} cx={50} cy={50} />
+    </svg>
+  );
+}
+
+function Cow({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <path d="M 30 22 q -10 -8 -4 -14 q 8 0 10 10" fill="#e8d8c3" />
+      <path d="M 70 22 q 10 -8 4 -14 q -8 0 -10 10" fill="#e8d8c3" />
+      <ellipse cx="20" cy="38" rx="12" ry="7" fill="#f5efe6" transform="rotate(-20 20 38)" />
+      <ellipse cx="80" cy="38" rx="12" ry="7" fill="#f5efe6" transform="rotate(20 80 38)" />
+      <circle cx="50" cy="56" r="33" fill="#f5efe6" />
+      <path d="M 28 36 q 12 -10 20 2 q -10 8 -20 -2 z" fill="#4a4a4a" />
+      <path d="M 74 70 q 4 12 -6 14 q -8 -8 0 -16 z" fill="#4a4a4a" />
+      <ellipse cx="50" cy="72" rx="17" ry="12" fill="#f4b8c1" />
+      <ellipse cx="43" cy="71" rx="3.5" ry="4.5" fill="#c98897" />
+      <ellipse cx="57" cy="71" rx="3.5" ry="4.5" fill="#c98897" />
+      <Face mood={mood} cx={50} cy={48} />
+    </svg>
+  );
+}
+
 export const builtinCharacters: BuiltinCharacter[] = [
-  { id: 'builtin:bunny', name: 'Bunny', render: (mood) => <Bunny mood={mood} /> },
-  { id: 'builtin:bear', name: 'Bear', render: (mood) => <Bear mood={mood} /> },
-  { id: 'builtin:frog', name: 'Frog', render: (mood) => <Frog mood={mood} /> },
-  { id: 'builtin:fox', name: 'Fox', render: (mood) => <Fox mood={mood} /> },
-  { id: 'builtin:duck', name: 'Duck', render: (mood) => <Duck mood={mood} /> },
+  { id: 'builtin:bunny', name: 'Bunny', spot: 'hat', render: (mood) => <Bunny mood={mood} /> },
+  { id: 'builtin:chick', name: 'Chick', spot: 'egg', render: (mood) => <Chick mood={mood} /> },
+  { id: 'builtin:frog', name: 'Frog', spot: 'pond', render: (mood) => <Frog mood={mood} /> },
+  { id: 'builtin:cow', name: 'Cow', spot: 'barn', render: (mood) => <Cow mood={mood} /> },
+  { id: 'builtin:bear', name: 'Bear', spot: 'cave', render: (mood) => <Bear mood={mood} /> },
+  { id: 'builtin:fox', name: 'Fox', spot: 'bush', render: (mood) => <Fox mood={mood} /> },
+  { id: 'builtin:duck', name: 'Duck', spot: 'pond', render: (mood) => <Duck mood={mood} /> },
 ];
 
 export function getBuiltinCharacter(id: string): BuiltinCharacter {

@@ -32,13 +32,26 @@ export function playCelebration() {
   if (!ctx) return;
 
   const now = ctx.currentTime;
+
+  // "Pop!" as the character bursts out of its hiding spot
+  const pop = ctx.createOscillator();
+  const popGain = ctx.createGain();
+  pop.type = 'sine';
+  pop.frequency.setValueAtTime(260, now);
+  pop.frequency.exponentialRampToValueAtTime(880, now + 0.09);
+  popGain.gain.setValueAtTime(0.3, now);
+  popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+  pop.connect(popGain).connect(ctx.destination);
+  pop.start(now);
+  pop.stop(now + 0.2);
+
   const arpeggio = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
   arpeggio.forEach((freq, i) => {
-    playNote(freq, now + i * 0.13, 0.45, 0.25);
-    playNote(freq * 1.5, now + i * 0.13, 0.45, 0.06); // sparkle a fifth up
+    playNote(freq, now + 0.15 + i * 0.13, 0.45, 0.25);
+    playNote(freq * 1.5, now + 0.15 + i * 0.13, 0.45, 0.06); // sparkle a fifth up
   });
   // Final chord
-  const chordAt = now + arpeggio.length * 0.13 + 0.05;
+  const chordAt = now + 0.15 + arpeggio.length * 0.13 + 0.05;
   [523.25, 659.25, 783.99, 1046.5].forEach((freq) => {
     playNote(freq, chordAt, 1.1, 0.12);
   });
