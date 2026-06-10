@@ -1,7 +1,17 @@
 import type { ReactNode } from 'react';
 import { getBuiltinCharacter } from './characters';
 
-export type SpotId = 'egg' | 'pond' | 'hat' | 'cave' | 'bush' | 'barn' | 'gift';
+export type SpotId =
+  | 'egg'
+  | 'pond'
+  | 'hat'
+  | 'cave'
+  | 'bush'
+  | 'barn'
+  | 'doghouse'
+  | 'mud'
+  | 'box'
+  | 'gift';
 
 export interface HidingSpot {
   /** Friendly name, e.g. for accessibility labels. */
@@ -120,6 +130,48 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
         <rect x="40" y="68" width="20" height="24" rx="2" fill="#fdf3e7" />
         <path d="M 40 68 L 60 92 M 60 68 L 40 92" stroke="#e85d4a" strokeWidth="3" />
         <rect x="40" y="68" width="20" height="24" rx="2" fill="none" stroke="#a64133" strokeWidth="2.5" />
+      </svg>
+    ),
+  },
+  doghouse: {
+    name: 'Doghouse',
+    reveal: 'above',
+    front: (
+      <svg {...svgProps}>
+        <ellipse cx="50" cy="92" rx="40" ry="5" fill="rgba(61,44,41,0.08)" />
+        <path d="M 26 92 L 26 60 L 50 46 L 74 60 L 74 92 Z" fill="#d8a657" />
+        <path d="M 21 62 L 50 44 L 79 62" stroke="#8a5a3b" strokeWidth="7" fill="none" strokeLinecap="round" />
+        <path d="M 38 92 L 38 74 A 12 12 0 0 1 62 74 L 62 92 Z" fill="#5c4033" />
+        <circle cx="50" cy="56" r="4" fill="#8a5a3b" />
+      </svg>
+    ),
+  },
+  mud: {
+    name: 'Mud puddle',
+    reveal: 'above',
+    front: (
+      <svg {...svgProps}>
+        <ellipse cx="50" cy="78" rx="40" ry="15" fill="#8a5a3b" />
+        <ellipse cx="50" cy="76" rx="34" ry="11" fill="#a47148" />
+        <ellipse cx="38" cy="76" rx="10" ry="3" fill="#b98860" />
+        <ellipse cx="66" cy="81" rx="8" ry="2.5" fill="#b98860" />
+        <circle cx="26" cy="68" r="3" fill="#a47148" />
+        <circle cx="74" cy="66" r="2.5" fill="#a47148" />
+        <circle cx="60" cy="63" r="2" fill="#a47148" />
+      </svg>
+    ),
+  },
+  box: {
+    name: 'Cardboard box',
+    reveal: 'above',
+    front: (
+      <svg {...svgProps}>
+        <ellipse cx="50" cy="93" rx="36" ry="5" fill="rgba(61,44,41,0.08)" />
+        <rect x="26" y="58" width="48" height="34" rx="2" fill="#d8a657" />
+        <rect x="26" y="58" width="48" height="34" rx="2" fill="none" stroke="#b07d3f" strokeWidth="2.5" />
+        <path d="M 26 58 L 12 50 L 14 64 L 26 68 Z" fill="#c9924b" stroke="#b07d3f" strokeWidth="2" />
+        <path d="M 74 58 L 88 50 L 86 64 L 74 68 Z" fill="#c9924b" stroke="#b07d3f" strokeWidth="2" />
+        <rect x="47" y="58" width="6" height="34" fill="#e8c184" />
       </svg>
     ),
   },

@@ -57,9 +57,11 @@ export function playCelebration() {
   });
 }
 
-/** Soft tick for the last few seconds of a countdown. */
-export function playTick() {
-  if (muted) return;
-  if (!ctx) return;
-  playNote(880, ctx.currentTime, 0.08, 0.05);
+/** Soft tick-tock for the countdown; brighter and a touch louder in the last seconds. */
+let tickTock = false;
+export function playTick(urgent = false) {
+  if (muted || !ctx) return;
+  tickTock = !tickTock;
+  const frequency = urgent ? (tickTock ? 1318.5 : 987.8) : (tickTock ? 880 : 659.25);
+  playNote(frequency, ctx.currentTime, 0.07, urgent ? 0.08 : 0.035);
 }

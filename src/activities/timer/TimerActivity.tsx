@@ -52,6 +52,8 @@ export function TimerActivity({ onExit }: Props) {
         characterId={roundCharacterId}
         progress={timer.progress}
         remainingMs={timer.remainingMs}
+        muted={settings.muted}
+        onToggleMute={() => setSettings((s) => saveSettings({ muted: !s.muted }))}
         onCancel={timer.cancel}
       />
     );

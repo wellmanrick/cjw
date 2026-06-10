@@ -12,11 +12,14 @@ A Hatch-style visual countdown for little ones who can't read clocks yet:
 - A big ring drains and shifts green → red as time runs out
 - The surprise: each character hides in its home during the countdown —
   chick in an egg, frog in a pond, cow behind the barn, bunny in a magic
-  hat, bear in a cave, fox in a bush — peeking out now and then, and pops
+  hat, puppy in a doghouse, piggy in a mud puddle, kitty in a cardboard
+  box, bear in a cave, fox in a bush — peeking out now and then, and pops
   out when time is up
 - Photos you upload hide in a gift box that bursts open
 - A "?" tile picks a surprise character at random each round
-- Confetti + a pop-and-chime celebration when time is up (mute toggle included)
+- A gentle tick-tock while counting down (brighter in the last 10 seconds)
+- Confetti + a pop-and-chime celebration when time is up (mute toggle on
+  both the setup and running screens)
 - Parent-friendly: preset buttons (1/2/5/10/15 min) or custom minutes/seconds
 - Toddler-proof: while running, the only control is a 2-second hold-to-stop
 - Keeps the phone screen awake during a countdown, and stays accurate even
