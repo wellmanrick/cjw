@@ -91,6 +91,123 @@
   }
 }
 
+/* --- Hiding scene (the surprise) --- */
+
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.spotLayer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 90%;
+}
+
+.characterHolder {
+  position: absolute;
+  left: 22%;
+  bottom: 8%;
+  width: 56%;
+  height: 64%;
+  transform-origin: 50% 100%;
+}
+
+/* Fully hidden (spots with a lid — egg, gift box). */
+.characterTucked {
+  transform: translateY(68%) scale(0.6);
+}
+
+/* Mostly hidden, with an occasional peek-a-boo. */
+.characterPeeking {
+  animation: peekaboo 9s ease-in-out infinite;
+}
+
+@keyframes peekaboo {
+  0%,
+  72%,
+  100% {
+    transform: translateY(68%) scale(0.6);
+  }
+  80%,
+  90% {
+    transform: translateY(36%) scale(0.7);
+  }
+}
+
+/* The surprise: spring up and out (nestled in the spot, e.g. chick in egg). */
+.characterRevealed {
+  animation: popOut 0.8s cubic-bezier(0.25, 0.1, 0.3, 1) forwards;
+}
+
+@keyframes popOut {
+  0% {
+    transform: translateY(68%) scale(0.6);
+  }
+  55% {
+    transform: translateY(-12%) scale(1.06);
+  }
+  75% {
+    transform: translateY(4%) scale(0.98);
+  }
+  100% {
+    transform: translateY(-2%) scale(1);
+  }
+}
+
+/* Bigger jump, clearing the scenery (frog out of the pond, bunny out of the hat). */
+.characterRevealedAbove {
+  animation: popOutAbove 0.8s cubic-bezier(0.25, 0.1, 0.3, 1) forwards;
+}
+
+@keyframes popOutAbove {
+  0% {
+    transform: translateY(68%) scale(0.6);
+  }
+  55% {
+    transform: translateY(-52%) scale(1.06);
+  }
+  75% {
+    transform: translateY(-36%) scale(0.98);
+  }
+  100% {
+    transform: translateY(-42%) scale(1);
+  }
+}
+
+.spotWiggleSlow {
+  animation: spotWiggle 3.2s ease-in-out infinite;
+}
+
+.spotWiggleFast {
+  animation: spotWiggle 0.6s ease-in-out infinite;
+}
+
+@keyframes spotWiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-2.5deg);
+  }
+  70% {
+    transform: rotate(2.5deg);
+  }
+}
+
+.lidOff {
+  animation: lidOff 0.7s ease-out forwards;
+}
+
+@keyframes lidOff {
+  to {
+    transform: translate(-45%, -110%) rotate(-50deg);
+    opacity: 0;
+  }
+}
+
 /* --- Running screen --- */
 
 .runningScreen {
@@ -284,6 +401,13 @@
   color: #fff;
   font-size: 0.8rem;
   box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.surpriseTile {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
 }
 
 .addPhotoTile {

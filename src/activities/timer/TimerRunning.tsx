@@ -1,7 +1,7 @@
 import { HoldButton } from '../../components/HoldButton';
 import { useWakeLock } from '../../lib/useWakeLock';
-import { CharacterDisplay } from './CharacterDisplay';
 import { CountdownRing } from './CountdownRing';
+import { HidingScene } from './HidingScene';
 import type { Mood } from './characters';
 import styles from './timer.module.css';
 
@@ -30,7 +30,12 @@ export function TimerRunning({ characterId, progress, remainingMs, onCancel }: P
   return (
     <div className={`screen ${styles.runningScreen}`}>
       <CountdownRing progress={progress} pulsing={lastTen}>
-        <CharacterDisplay characterId={characterId} mood={moodFor(progress)} />
+        <HidingScene
+          characterId={characterId}
+          mood={moodFor(progress)}
+          revealed={false}
+          excited={lastTen}
+        />
       </CountdownRing>
       <div className={styles.remainingLabel}>{formatRemaining(remainingMs)}</div>
       <HoldButton onHoldComplete={onCancel} className={styles.stopButton}>

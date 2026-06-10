@@ -52,6 +52,16 @@ export function CharacterPicker({ selectedId, onSelect }: Props) {
 
   return (
     <div className={styles.pickerRow}>
+      <button
+        type="button"
+        className={`${styles.pickerTile} ${styles.surpriseTile} ${
+          selectedId === 'surprise' ? styles.pickerSelected : ''
+        }`}
+        onClick={() => onSelect('surprise')}
+        aria-label="Surprise me"
+      >
+        ?
+      </button>
       {builtinCharacters.map((c) => (
         <button
           key={c.id}

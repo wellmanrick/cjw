@@ -1,4 +1,4 @@
-import { CharacterDisplay } from './CharacterDisplay';
+import { HidingScene } from './HidingScene';
 import styles from './timer.module.css';
 
 const CONFETTI_COLORS = ['#f582ae', '#8bd3dd', '#f7b733', '#4cc26b', '#b388eb', '#e8833a'];
@@ -51,7 +51,7 @@ export function Celebration({ characterId, onAgain, onDone }: Props) {
       </div>
       <h1 className={styles.allDone}>All done!</h1>
       <div className={styles.celebrationCharacter}>
-        <CharacterDisplay characterId={characterId} mood="party" />
+        <HidingScene characterId={characterId} mood="party" revealed />
       </div>
       <div className={styles.celebrationButtons}>
         <button type="button" className={styles.againButton} onClick={onAgain}>

@@ -4,7 +4,13 @@ import { playCelebration, setMuted as setSoundMuted, unlockAudio } from '../../l
 import { Celebration } from './Celebration';
 import { TimerRunning } from './TimerRunning';
 import { TimerSetup } from './TimerSetup';
+import { builtinCharacters } from './characters';
 import { useCountdown } from './useCountdown';
+
+function resolveCharacter(characterId: string): string {
+  if (characterId !== 'surprise') return characterId;
+  return builtinCharacters[Math.floor(Math.random() * builtinCharacters.length)].id;
+}
 
 interface Props {
   onExit: () => void;
@@ -12,6 +18,8 @@ interface Props {
 
 export function TimerActivity({ onExit }: Props) {
   const [settings, setSettings] = useState(loadSettings);
+  // The character actually hiding this round — resolved from 'surprise' at start.
+  const [activeCharacterId, setActiveCharacterId] = useState<string | null>(null);
   const timer = useCountdown();
   const celebratedRef = useRef(false);
 
@@ -29,14 +37,19 @@ export function TimerActivity({ onExit }: Props) {
 
   const handleStart = (durationMs: number) => {
     unlockAudio();
+    setActiveCharacterId(resolveCharacter(settings.characterId));
     setSettings(saveSettings({ lastDurationMs: durationMs }));
     timer.start(durationMs);
   };
 
+  // activeCharacterId is set in handleStart; the fallback only guards first render.
+  const roundCharacterId =
+    activeCharacterId ?? (settings.characterId === 'surprise' ? builtinCharacters[0].id : settings.characterId);
+
   if (timer.status === 'running' || timer.status === 'paused') {
     return (
       <TimerRunning
-        characterId={settings.characterId}
+        characterId={roundCharacterId}
         progress={timer.progress}
         remainingMs={timer.remainingMs}
         onCancel={timer.cancel}
@@ -47,8 +60,12 @@ export function TimerActivity({ onExit }: Props) {
   if (timer.status === 'done') {
     return (
       <Celebration
-        characterId={settings.characterId}
-        onAgain={() => timer.start(timer.totalMs)}
+        characterId={roundCharacterId}
+        onAgain={() => {
+          // A fresh surprise each round if "surprise" is selected.
+          setActiveCharacterId(resolveCharacter(settings.characterId));
+          timer.start(timer.totalMs);
+        }}
         onDone={timer.reset}
       />
     );
