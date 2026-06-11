@@ -329,6 +329,23 @@
   }
 }
 
+/* Digger boom arm bobbing. */
+.armBob {
+  animation: armBob 2.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 5% 95%;
+}
+
+@keyframes armBob {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-6deg);
+  }
+}
+
 /* Celebration sparkles. */
 .sparkle {
   position: absolute;

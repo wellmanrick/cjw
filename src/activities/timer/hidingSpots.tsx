@@ -13,6 +13,9 @@ export type SpotId =
   | 'garage'
   | 'mud'
   | 'box'
+  | 'toybox'
+  | 'dirtpile'
+  | 'waves'
   | 'gift';
 
 export interface HidingSpot {
@@ -248,6 +251,83 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
           <circle cx="60" cy="80" r="1.1" />
           <circle cx="63" cy="79" r="1.1" />
           <circle cx="66" cy="80" r="1.1" />
+        </g>
+      </svg>
+    ),
+  },
+  toybox: {
+    name: 'Toy chest',
+    reveal: 'above',
+    front: (
+      <svg {...svgProps}>
+        <ellipse cx="50" cy="93" rx="36" ry="5" fill="rgba(61,44,41,0.1)" />
+        <rect x="24" y="60" width="52" height="32" rx="4" fill="#5fbfcc" stroke={INK} strokeWidth="2.6" />
+        <rect x="24" y="60" width="52" height="6" fill="#4aa3b0" />
+        {/* toys peeking over the rim */}
+        <g stroke={INK} strokeWidth="1.8">
+          <rect x="29" y="68" width="11" height="11" rx="1.5" fill="#ffd166" />
+          <circle cx="68" cy="74" r="6" fill="#f0708d" />
+          <path d="M 62.5 73 q 5.5 -4 11 0" fill="none" stroke="#fff" strokeWidth="2" />
+        </g>
+        <path d="M 32 71 l 5 5 M 37 71 l -5 5" stroke={INK} strokeWidth="1.6" />
+      </svg>
+    ),
+    lid: (
+      <svg {...svgProps}>
+        <rect x="21" y="48" width="58" height="13" rx="5" fill="#4aa3b0" stroke={INK} strokeWidth="2.4" />
+        <rect x="44" y="44" width="12" height="8" rx="3" fill="#ffd166" stroke={INK} strokeWidth="2" />
+      </svg>
+    ),
+  },
+  dirtpile: {
+    name: 'Dirt pile',
+    reveal: 'above',
+    front: (
+      <svg {...svgProps}>
+        <path d="M 10 92 Q 18 58 50 56 Q 82 58 90 92 Z" fill="#a47148" stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
+        <path d="M 24 80 q 6 -8 14 -6 M 60 72 q 8 0 12 6" stroke="#8a5a3b" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+        <circle cx="36" cy="86" r="3" fill="#8a5a3b" />
+        <circle cx="66" cy="84" r="2.4" fill="#8a5a3b" />
+        {/* traffic cones */}
+        <g stroke={INK} strokeWidth="2" strokeLinejoin="round">
+          <path d="M 13 90 L 18 74 L 23 90 Z" fill="#fb8b24" />
+          <rect x="10" y="89" width="16" height="4" rx="2" fill="#fb8b24" />
+          <path d="M 15.5 83 L 20.5 83" stroke="#fff" strokeWidth="2.4" />
+          <path d="M 77 90 L 82 74 L 87 90 Z" fill="#fb8b24" />
+          <rect x="74" y="89" width="16" height="4" rx="2" fill="#fb8b24" />
+          <path d="M 79.5 83 L 84.5 83" stroke="#fff" strokeWidth="2.4" />
+        </g>
+      </svg>
+    ),
+  },
+  waves: {
+    name: 'Ocean waves',
+    reveal: 'above',
+    back: (
+      <svg {...svgProps}>
+        <rect x="0" y="0" width="100" height="100" fill="#dff1fb" />
+        <circle cx="80" cy="30" r="9" fill="#ffd166" stroke={INK} strokeWidth="1.8" />
+        <g stroke="#ffd166" strokeWidth="2.4" strokeLinecap="round" opacity="0.8">
+          <line x1="80" y1="16" x2="80" y2="20" />
+          <line x1="69" y1="22" x2="72" y2="25" />
+          <line x1="91" y1="22" x2="88" y2="25" />
+        </g>
+        <g fill="#fff" stroke={INK} strokeWidth="1.6" opacity="0.9">
+          <ellipse cx="22" cy="30" rx="9" ry="4.5" />
+          <ellipse cx="29" cy="27" rx="7" ry="4" />
+        </g>
+      </svg>
+    ),
+    front: (
+      <svg {...svgProps}>
+        <path d="M 4 74 Q 12 64 22 72 Q 32 64 42 72 Q 52 64 62 72 Q 72 64 82 72 Q 92 64 96 72 L 96 96 L 4 96 Z" fill="#5fa8d3" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+        <path d="M 4 82 Q 14 74 24 81 Q 34 74 44 81 Q 54 74 64 81 Q 74 74 84 81 Q 92 76 96 81 L 96 96 L 4 96 Z" fill="#7cc6e8" stroke={INK} strokeWidth="2" />
+        <ellipse className={styles.ripple} cx="34" cy="78" rx="9" ry="2.6" fill="none" stroke="#eaf6fb" strokeWidth="2" />
+        <ellipse className={`${styles.ripple} ${styles.rippleLate}`} cx="64" cy="80" rx="8" ry="2.4" fill="none" stroke="#eaf6fb" strokeWidth="2" />
+        <g fill="#eaf6fb">
+          <circle cx="14" cy="73" r="2" />
+          <circle cx="48" cy="71" r="2.2" />
+          <circle cx="82" cy="72" r="2" />
         </g>
       </svg>
     ),
