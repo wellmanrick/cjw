@@ -9,7 +9,7 @@ interface Props {
 }
 
 const moodClass: Record<Mood, string> = {
-  happy: '',
+  happy: 'characterBreathe',
   excited: 'characterWiggle',
   party: 'characterBounce',
 };

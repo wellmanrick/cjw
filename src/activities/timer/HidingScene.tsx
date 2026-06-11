@@ -39,7 +39,11 @@ export function HidingScene({ characterId, mood, revealed, excited = false }: Pr
       </div>
       <div className={`${styles.spotLayer} ${sceneryWiggle}`}>{spot.front}</div>
       {spot.lid && (
-        <div className={`${styles.spotLayer} ${revealed ? styles.lidOff : sceneryWiggle}`}>
+        <div
+          className={`${styles.spotLayer} ${
+            revealed ? (spot.lidStyle === 'slide' ? styles.lidSlide : styles.lidOff) : sceneryWiggle
+          }`}
+        >
           {spot.lid}
         </div>
       )}

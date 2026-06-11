@@ -1,3 +1,5 @@
+import type { Song, SongEvent } from './songs';
+
 let ctx: AudioContext | null = null;
 let muted = false;
 
@@ -57,94 +59,13 @@ export function playCelebration() {
   });
 }
 
-/** Soft tick-tock for the countdown; brighter and a touch louder in the last seconds. */
-let tickTock = false;
-export function playTick(urgent = false) {
-  if (muted || !ctx) return;
-  tickTock = !tickTock;
-  const frequency = urgent ? (tickTock ? 1318.5 : 987.8) : (tickTock ? 880 : 659.25);
-  playNote(frequency, ctx.currentTime, 0.07, urgent ? 0.08 : 0.035);
-}
-
-/* --- "The Wheels on the Bus" (traditional) — looped countdown song --- */
-
-const C3 = 130.81, F3 = 174.61, G3 = 196.0, A3 = 220.0;
-const C4 = 261.63, E4 = 329.63, F4 = 349.23, G4 = 392.0, A4 = 440.0, C5 = 523.25;
-
-export interface SongEvent {
-  /** Beat position within the loop. */
-  at: number;
-  freq: number;
-  /** Length in beats. */
-  beats: number;
-  gain: number;
-  voice: 'melody' | 'bass';
-}
-
-export const BUS_BEAT_S = 0.42;
-export const BUS_LOOP_BEATS = 34;
-
-function buildBusSong(): SongEvent[] {
-  const events: SongEvent[] = [];
-  const mel = (at: number, freq: number, beats: number) =>
-    events.push({ at, freq, beats, gain: 0.11, voice: 'melody' });
-  const bass = (at: number, freq: number, beats: number) =>
-    events.push({ at, freq, beats, gain: 0.055, voice: 'bass' });
-
-  const wheelsOnTheBus = (at: number) => {
-    // "The wheels on the bus go round and round"
-    mel(at, C4, 1);
-    mel(at + 1, F4, 1);
-    mel(at + 2, F4, 0.5);
-    mel(at + 2.5, F4, 0.5);
-    mel(at + 3, F4, 1);
-    mel(at + 4, A4, 1);
-    mel(at + 5, C5, 1);
-    mel(at + 6, A4, 1);
-    mel(at + 7, F4, 2);
-    // gentle oom-pah underneath (F major)
-    for (let b = 1; b < 8; b += 2) {
-      bass(at + b, F3, 1);
-      bass(at + b + 1, C4, 0.8);
-    }
-  };
-
-  wheelsOnTheBus(0);
-  // "round and round" (C7 -> F)
-  mel(9, G4, 1);
-  mel(10, E4, 1);
-  mel(11, C4, 2);
-  bass(9, G3, 2);
-  bass(11, C3, 2);
-  // "round and round" (F)
-  mel(13, A4, 1);
-  mel(14, F4, 1);
-  mel(15, C4, 2);
-  bass(13, F3, 2);
-  bass(15, A3, 2);
-
-  wheelsOnTheBus(17);
-  // "all through the town" (C7 -> F)
-  mel(26, A4, 1);
-  mel(27, G4, 1);
-  mel(28, G4, 1);
-  mel(29, F4, 3);
-  bass(26, G3, 2);
-  bass(28, C3, 1);
-  bass(29, F3, 3);
-  // the rest of the loop is a breath before it starts again
-
-  return events.sort((a, b) => a.at - b.at);
-}
-
-export const BUS_EVENTS = buildBusSong();
-
+/* --- Looped countdown songs (see songs.ts for the library) --- */
 /**
  * Soft music-box note: sine fundamental + quiet octave shimmer + slight
  * detune, through a lowpass so it stays mellow on phone speakers.
  */
-export function playBusEvent(target: BaseAudioContext, event: SongEvent, when: number) {
-  const duration = Math.min(event.beats * BUS_BEAT_S * 1.05, 1.6);
+export function playSongEvent(target: BaseAudioContext, event: SongEvent, beatS: number, when: number) {
+  const duration = Math.min(event.beats * beatS * 1.05, 1.6);
   const filter = target.createBiquadFilter();
   filter.type = 'lowpass';
   filter.frequency.value = event.voice === 'melody' ? 2400 : 900;
@@ -177,38 +98,43 @@ export function playBusEvent(target: BaseAudioContext, event: SongEvent, when: n
 const SONG_LOOKAHEAD_S = 0.3;
 const SONG_TICK_MS = 120;
 
-let busSongTimer = 0;
-let busLoopStart = 0;
-let busEventIndex = 0;
+let songTimer = 0;
+let activeSong: Song | null = null;
+let songLoopStart = 0;
+let songEventIndex = 0;
 
-function busSchedulerTick() {
-  if (!ctx) return;
+function songSchedulerTick() {
+  if (!ctx || !activeSong) return;
+  const song = activeSong;
   const horizon = ctx.currentTime + SONG_LOOKAHEAD_S;
   for (;;) {
-    if (busEventIndex >= BUS_EVENTS.length) {
-      busEventIndex = 0;
-      busLoopStart += BUS_LOOP_BEATS * BUS_BEAT_S;
+    if (songEventIndex >= song.events.length) {
+      songEventIndex = 0;
+      songLoopStart += song.loopBeats * song.beatS;
     }
-    const event = BUS_EVENTS[busEventIndex];
-    const when = busLoopStart + event.at * BUS_BEAT_S;
+    const event = song.events[songEventIndex];
+    const when = songLoopStart + event.at * song.beatS;
     if (when > horizon) break;
-    if (!muted && when >= ctx.currentTime - 0.05) playBusEvent(ctx, event, when);
-    busEventIndex += 1;
+    if (!muted && when >= ctx.currentTime - 0.05) playSongEvent(ctx, event, song.beatS, when);
+    songEventIndex += 1;
   }
 }
 
-/** Loop the song quietly; notes respect the mute toggle as they're scheduled. */
-export function startBusSong() {
-  if (busSongTimer !== 0) return;
+/** Loop a song quietly; notes respect the mute toggle as they're scheduled. */
+export function startSong(song: Song) {
+  if (activeSong?.id === song.id && songTimer !== 0) return;
+  stopSong();
   unlockAudio();
   if (!ctx) return;
-  busLoopStart = ctx.currentTime + 0.1;
-  busEventIndex = 0;
-  busSchedulerTick();
-  busSongTimer = window.setInterval(busSchedulerTick, SONG_TICK_MS);
+  activeSong = song;
+  songLoopStart = ctx.currentTime + 0.1;
+  songEventIndex = 0;
+  songSchedulerTick();
+  songTimer = window.setInterval(songSchedulerTick, SONG_TICK_MS);
 }
 
-export function stopBusSong() {
-  window.clearInterval(busSongTimer);
-  busSongTimer = 0;
+export function stopSong() {
+  window.clearInterval(songTimer);
+  songTimer = 0;
+  activeSong = null;
 }

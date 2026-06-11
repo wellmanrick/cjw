@@ -17,9 +17,14 @@ A Hatch-style visual countdown for little ones who can't read clocks yet:
   out when time is up
 - Photos you upload hide in a gift box that bursts open
 - A "?" tile picks a surprise character at random each round
-- A gentle tick-tock while counting down (brighter in the last 10 seconds) —
-  unless the school bus is counting down, which sings "The Wheels on the
-  Bus" on loop instead (it hides in a garage)
+- Every character sings its own classic tune while it hides: the school
+  bus does The Wheels on the Bus, the cow Old MacDonald, the puppy BINGO,
+  the kitty Pop Goes the Weasel, the bunny Twinkle Twinkle, the bear
+  Frère Jacques, the chick Mary Had a Little Lamb, the frog and duck Row
+  Row Row Your Boat, the piggy If You're Happy and You Know It, the fox
+  London Bridge — and photos in the gift box get Happy Birthday
+- Storybook cartoon art with outlines, blinking eyes, wagging tails,
+  spinning bus wheels, pond ripples, and a happy dance at the reveal
 - Confetti + a pop-and-chime celebration when time is up (mute toggle on
   both the setup and running screens)
 - Parent-friendly: preset buttons (1/2/5/10/15 min) or custom minutes/seconds

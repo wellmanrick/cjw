@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { HoldButton } from '../../components/HoldButton';
-import { playTick, startBusSong, stopBusSong } from '../../lib/sound';
+import { songForCharacter } from '../../lib/songs';
+import { startSong, stopSong } from '../../lib/sound';
 import { useWakeLock } from '../../lib/useWakeLock';
 import { CountdownRing } from './CountdownRing';
 import { HidingScene } from './HidingScene';
@@ -37,24 +38,12 @@ export function TimerRunning({
 }: Props) {
   useWakeLock(true);
   const lastTen = remainingMs <= 10_000;
-  // The school bus sings "The Wheels on the Bus" instead of ticking.
-  const singsInstead = characterId === 'builtin:bus';
 
+  // Every character sings its own tune while it hides.
   useEffect(() => {
-    if (!singsInstead) return;
-    startBusSong();
-    return stopBusSong;
-  }, [singsInstead]);
-
-  // Tick-tock once per second while counting down.
-  const secondsLeft = Math.ceil(remainingMs / 1000);
-  const prevSecondsRef = useRef(secondsLeft);
-  useEffect(() => {
-    if (secondsLeft !== prevSecondsRef.current) {
-      prevSecondsRef.current = secondsLeft;
-      if (!singsInstead) playTick(secondsLeft <= 10);
-    }
-  }, [secondsLeft, singsInstead]);
+    startSong(songForCharacter(characterId));
+    return stopSong;
+  }, [characterId]);
 
   return (
     <div className={`screen ${styles.runningScreen}`}>
