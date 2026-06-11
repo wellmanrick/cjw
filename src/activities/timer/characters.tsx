@@ -428,6 +428,136 @@ function Bus({ mood }: { mood: Mood }) {
   );
 }
 
+/** Zigzag fur outline for the monster (computed once; render stays pure). */
+function spikyCircle(cx: number, cy: number, rOuter: number, rInner: number, spikes: number): string {
+  let d = '';
+  for (let i = 0; i < spikes * 2; i++) {
+    const r = i % 2 === 0 ? rOuter : rInner;
+    const a = (Math.PI * i) / spikes - Math.PI / 2;
+    d += `${i === 0 ? 'M' : 'L'} ${(cx + r * Math.cos(a)).toFixed(1)} ${(cy + r * Math.sin(a)).toFixed(1)} `;
+  }
+  return `${d}Z`;
+}
+
+const MONSTER_FUR = spikyCircle(50, 50, 37, 31.5, 19);
+const MONSTER_FUR_INNER = spikyCircle(50, 50, 30, 26, 14);
+
+/** Original fuzzy red monster friend — big googly eyes, all giggles. */
+function Monster({ mood }: { mood: Mood }) {
+  const eyeY = 36;
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      {/* shaggy arms + feet */}
+      <g stroke={INK} strokeWidth="2.2" strokeLinejoin="round">
+        <path d="M 12 56 q -6 4 -4 11 q 2 1 5 -1 q -1 4 3 5 q 5 -2 6 -10 Z" fill="#e2493b" />
+        <path d="M 88 56 q 6 4 4 11 q -2 1 -5 -1 q 1 4 -3 5 q -5 -2 -6 -10 Z" fill="#e2493b" />
+        <ellipse cx="40" cy="92" rx="8.5" ry="5" fill="#b9362b" />
+        <ellipse cx="60" cy="92" rx="8.5" ry="5" fill="#b9362b" />
+      </g>
+      {/* shaggy body */}
+      <path d={MONSTER_FUR} fill="#e2493b" stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
+      <path d={MONSTER_FUR_INNER} fill="#ef5d4e" opacity="0.7" />
+      <Shine cx={42} cy={32} r={20} />
+      {/* googly eyes */}
+      {mood === 'party' ? (
+        <g stroke={INK} strokeWidth="3.5" fill="none" strokeLinecap="round">
+          <path d={`M 32 ${eyeY} q 7 -9 14 0`} />
+          <path d={`M 54 ${eyeY} q 7 -9 14 0`} />
+        </g>
+      ) : (
+        <g className={styles.blinkGroup}>
+          <circle cx="39" cy={eyeY} r="9.5" fill="#fff" stroke={INK} strokeWidth="2.2" />
+          <circle cx="61" cy={eyeY} r="9.5" fill="#fff" stroke={INK} strokeWidth="2.2" />
+          <circle cx="41" cy={eyeY + 2} r={mood === 'excited' ? 4.6 : 4} fill={INK} />
+          <circle cx="63" cy={eyeY + 2} r={mood === 'excited' ? 4.6 : 4} fill={INK} />
+          <circle cx="42.5" cy={eyeY} r="1.4" fill="#fff" />
+          <circle cx="64.5" cy={eyeY} r="1.4" fill="#fff" />
+        </g>
+      )}
+      {/* friendly blue nose */}
+      <ellipse cx="50" cy="52" rx="7" ry="5.5" fill="#5b8dd9" stroke={INK} strokeWidth="2.2" />
+      <ellipse cx="47.5" cy="50" rx="2" ry="1.4" fill="#fff" opacity="0.7" />
+      <Cheeks cx={50} cy={58} color="#b9362b" />
+      {/* big monster grin */}
+      {mood === 'party' ? (
+        <>
+          <path d="M 34 62 q 16 20 32 0 z" fill="#7c2d3e" stroke={INK} strokeWidth="2.5" strokeLinejoin="round" />
+          <path d="M 43 71 q 7 6 14 0 q -7 5 -14 0 z" fill="#f0708d" />
+        </>
+      ) : mood === 'excited' ? (
+        <path d="M 37 62 q 13 14 26 0 z" fill="#7c2d3e" stroke={INK} strokeWidth="2.5" strokeLinejoin="round" />
+      ) : (
+        <path d="M 36 62 q 14 13 28 0" stroke={INK} strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      )}
+    </svg>
+  );
+}
+
+/** Cheerful excavator — its arm bobs while it works. */
+function Digger({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      {/* boom arm + bucket (bobbing) */}
+      <g className={styles.armBob}>
+        <path d="M 60 56 L 80 34 L 86 39 L 68 60 Z" fill="#e09f00" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+        <path d="M 80 34 L 92 46 L 87 51 L 76 40 Z" fill="#ffb703" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+        <path d="M 86 46 Q 98 50 92 60 Q 84 62 81 53 Z" fill="#9a8c98" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+        <circle cx="80" cy="36.5" r="2.4" fill="#d6d3d1" stroke={INK} strokeWidth="1.4" />
+      </g>
+      {/* cab */}
+      <rect x="14" y="38" width="42" height="34" rx="6" fill="#ffb703" stroke={INK} strokeWidth="2.6" />
+      <rect x="14" y="38" width="42" height="9" rx="5" fill="#ffd166" />
+      <rect x="56" y="54" width="20" height="18" rx="3" fill="#e09f00" stroke={INK} strokeWidth="2.4" />
+      <path d="M 60 58 h 12 M 60 62 h 12 M 60 66 h 12" stroke={INK} strokeWidth="1.4" opacity="0.5" />
+      {/* face in the cab */}
+      <Cheeks cx={35} cy={56} color="#f4845f" />
+      <Face mood={mood} cx={35} cy={56} />
+      {/* tracks */}
+      <rect x="12" y="74" width="68" height="16" rx="8" fill="#57534e" stroke={INK} strokeWidth="2.6" />
+      <g className={styles.wheelSpin}>
+        <circle cx="24" cy="82" r="4.5" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+        <path d="M 24 77.5 L 24 86.5 M 19.5 82 L 28.5 82" stroke={INK} strokeWidth="1.4" />
+      </g>
+      <circle cx="46" cy="82" r="4.5" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+      <g className={styles.wheelSpin}>
+        <circle cx="68" cy="82" r="4.5" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+        <path d="M 68 77.5 L 68 86.5 M 63.5 82 L 72.5 82" stroke={INK} strokeWidth="1.4" />
+      </g>
+    </svg>
+  );
+}
+
+/** Happy baby shark (the song is the traditional campfire chant). */
+function BabyShark({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      {/* tail (wags) */}
+      <g className={styles.tailWag}>
+        <path d="M 76 58 Q 90 46 92 36 Q 96 48 90 58 Q 96 68 92 78 Q 88 68 76 64 Z" fill="#5fa8d3" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+      </g>
+      {/* body */}
+      <path d="M 12 58 Q 22 32 50 32 Q 74 32 82 56 Q 76 80 50 82 Q 24 82 12 58 Z" fill="#7cc6e8" stroke={INK} strokeWidth="2.8" strokeLinejoin="round" />
+      {/* belly */}
+      <path d="M 16 62 Q 32 76 56 76 Q 70 74 78 62 Q 70 80 50 82 Q 28 80 16 62 Z" fill="#eaf6fb" />
+      {/* dorsal fin */}
+      <path d="M 44 33 Q 46 18 58 16 Q 56 26 54 33 Z" fill="#5fa8d3" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+      {/* side fins */}
+      <path d="M 34 70 Q 28 80 18 80 Q 24 70 30 66 Z" fill="#5fa8d3" stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+      <path d="M 60 72 Q 60 82 50 86 Q 52 76 56 70 Z" fill="#5fa8d3" stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+      <Shine cx={40} cy={42} r={22} />
+      <Cheeks cx={42} cy={52} color="#5fa8d3" />
+      <Face mood={mood} cx={42} cy={50} />
+      {/* tiny friendly teeth on the big smile */}
+      {mood !== 'party' && (
+        <g fill="#fff" stroke={INK} strokeWidth="1">
+          <path d="M 38 60.5 l 2.5 3 l 2.5 -3 z" />
+          <path d="M 44 61 l 2.5 3 l 2.5 -3 z" />
+        </g>
+      )}
+    </svg>
+  );
+}
+
 /* --- Tails and extras --- */
 
 const dogTail = (
@@ -482,6 +612,24 @@ export const builtinCharacters: BuiltinCharacter[] = [
     name: 'School bus',
     spot: 'garage',
     render: (mood) => <Bus mood={mood} />,
+  },
+  {
+    id: 'builtin:monster',
+    name: 'Monster',
+    spot: 'toybox',
+    render: (mood) => <Monster mood={mood} />,
+  },
+  {
+    id: 'builtin:digger',
+    name: 'Digger',
+    spot: 'dirtpile',
+    render: (mood) => <Digger mood={mood} />,
+  },
+  {
+    id: 'builtin:shark',
+    name: 'Baby shark',
+    spot: 'waves',
+    render: (mood) => <BabyShark mood={mood} />,
   },
   {
     id: 'builtin:bunny',

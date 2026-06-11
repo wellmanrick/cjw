@@ -13,8 +13,9 @@ A Hatch-style visual countdown for little ones who can't read clocks yet:
 - The surprise: each character hides in its home during the countdown —
   chick in an egg, frog in a pond, cow behind the barn, bunny in a magic
   hat, puppy in a doghouse, piggy in a mud puddle, kitty in a cardboard
-  box, bear in a cave, fox in a bush — peeking out now and then, and pops
-  out when time is up
+  box, bear in a cave, fox in a bush, monster in a toy chest, digger
+  behind a dirt pile, baby shark under the ocean waves — peeking out now
+  and then, and popping out when time is up
 - Photos you upload hide in a gift box that bursts open
 - A "?" tile picks a surprise character at random each round
 - Every character sings its own classic tune while it hides: the school
@@ -22,7 +23,9 @@ A Hatch-style visual countdown for little ones who can't read clocks yet:
   the kitty Pop Goes the Weasel, the bunny Twinkle Twinkle, the bear
   Frère Jacques, the chick Mary Had a Little Lamb, the frog and duck Row
   Row Row Your Boat, the piggy If You're Happy and You Know It, the fox
-  London Bridge — and photos in the gift box get Happy Birthday
+  London Bridge, the monster Ring Around the Rosie, the digger Ode to
+  Joy, the baby shark Baby Shark (the traditional campfire chant) — and
+  photos in the gift box get Happy Birthday
 - Storybook cartoon art with outlines, blinking eyes, wagging tails,
   spinning bus wheels, pond ripples, and a happy dance at the reveal
 - Confetti + a pop-and-chime celebration when time is up (mute toggle on

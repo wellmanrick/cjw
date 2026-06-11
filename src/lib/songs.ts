@@ -220,6 +220,43 @@ function happyBirthday(): Song {
   return s.build('birthday', 'Happy Birthday', 0.45, 27);
 }
 
+function babyShark(): Song {
+  const s = new SongBuilder();
+  // "Baby shark, doo doo doo doo doo doo" x3, then "Baby shark!"
+  const verse = (at: number) => {
+    s.melody(at, [[C4, 0.75], [D4, 0.75], [E4, 0.5], [E4, 0.5], [E4, 0.5], [E4, 0.25], [E4, 0.25], [E4, 0.75]]);
+    s.bass(at, [[C3, 2], [G3, 2]]);
+  };
+  verse(0);
+  verse(4.5);
+  verse(9);
+  // "Baby shark!" + a little chomp
+  s.melody(13.5, [[C4, 0.75], [D4, 0.75], [E4, 1.5], [0, 0.5], [E5, 0.4, 0.16]]);
+  s.bass(13.5, [[C3, 1.5], [G3, 1], [C3, 1.5]]);
+  return s.build('shark', 'Baby Shark', 0.32, 19);
+}
+
+function odeToJoy(): Song {
+  const s = new SongBuilder();
+  s.melody(0, [[E4, 1], [E4, 1], [F4, 1], [G4, 1], [G4, 1], [F4, 1], [E4, 1], [D4, 1], [C4, 1], [C4, 1], [D4, 1], [E4, 1], [E4, 1.5], [D4, 0.5], [D4, 2]]);
+  s.melody(16, [[E4, 1], [E4, 1], [F4, 1], [G4, 1], [G4, 1], [F4, 1], [E4, 1], [D4, 1], [C4, 1], [C4, 1], [D4, 1], [E4, 1], [D4, 1.5], [C4, 0.5], [C4, 2]]);
+  s.bass(0, [[C3, 4], [C3, 4], [C3, 4], [G3, 4], [C3, 4], [C3, 4], [G3, 2], [G3, 2], [C3, 4]]);
+  return s.build('ode', 'Ode to Joy', 0.38, 33);
+}
+
+function ringAroundTheRosie(): Song {
+  const s = new SongBuilder();
+  // "Ring around the rosie, a pocket full of posies"
+  s.melody(0, [[G4, 1], [G4, 1], [A4, 1], [G4, 1], [E4, 2]]);
+  s.melody(6, [[G4, 1], [G4, 1], [A4, 1], [G4, 1], [E4, 2]]);
+  // "Ashes! Ashes!"
+  s.melody(12, [[G4, 1], [E4, 1], [0, 0.5], [G4, 1], [E4, 1]]);
+  // "We all fall DOWN!"
+  s.melody(16.5, [[G4, 1], [G4, 1], [E4, 1], [C4, 3]]);
+  s.bass(0, [[C3, 3], [G3, 3], [C3, 3], [G3, 3], [C3, 2], [G3, 2], [G3, 1.5], [C3, 3]]);
+  return s.build('rosie', 'Ring Around the Rosie', 0.42, 23);
+}
+
 const SONGS: Record<string, Song> = {};
 for (const song of [
   wheelsOnTheBus(),
@@ -233,6 +270,9 @@ for (const song of [
   frereJacques(),
   londonBridge(),
   happyBirthday(),
+  babyShark(),
+  odeToJoy(),
+  ringAroundTheRosie(),
 ]) {
   SONGS[song.id] = song;
 }
@@ -251,6 +291,9 @@ const CHARACTER_SONGS: Record<string, string> = {
   'builtin:bear': 'frere',
   'builtin:fox': 'london',
   'builtin:duck': 'row',
+  'builtin:shark': 'shark',
+  'builtin:digger': 'ode',
+  'builtin:monster': 'rosie',
 };
 
 /** Every character sings while it hides; uploaded photos get Happy Birthday. */
