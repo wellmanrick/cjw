@@ -76,3 +76,25 @@
   position: relative;
   z-index: 1;
 }
+
+/* --- Confetti (shared across celebrations) --- */
+
+.confettiLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -20px;
+  border-radius: 2px;
+  animation: confettiFall linear infinite;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(110vh) rotate(var(--confetti-spin, 540deg));
+  }
+}
