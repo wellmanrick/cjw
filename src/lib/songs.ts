@@ -257,6 +257,18 @@ function ringAroundTheRosie(): Song {
   return s.build('rosie', 'Ring Around the Rosie', 0.42, 23);
 }
 
+function pottyTime(): Song {
+  const s = new SongBuilder();
+  // An original, bright marching jingle to keep little ones happy on the throne.
+  s.melody(0, [[C4, 1], [E4, 1], [G4, 1], [E4, 1], [G4, 1], [A4, 1], [G4, 2]]);
+  s.melody(8, [[F4, 1], [A4, 1], [G4, 1], [E4, 1], [D4, 1], [D4, 1], [C4, 2]]);
+  s.melody(16, [[G4, 1], [G4, 1], [A4, 1], [G4, 1], [E4, 1], [C4, 1], [D4, 2]]);
+  s.melody(24, [[F4, 1], [E4, 1], [D4, 1], [G4, 1], [E4, 1], [D4, 1], [C4, 2]]);
+  s.bass(0, [[C3, 2], [C3, 2], [F3, 2], [C3, 2], [F3, 2], [C3, 2], [G3, 2], [C3, 2]]);
+  s.bass(16, [[C3, 2], [C3, 2], [F3, 2], [G3, 2], [F3, 2], [C3, 2], [G3, 2], [C3, 2]]);
+  return s.build('potty', 'Potty Time', 0.4, 33);
+}
+
 const SONGS: Record<string, Song> = {};
 for (const song of [
   wheelsOnTheBus(),
@@ -273,6 +285,7 @@ for (const song of [
   babyShark(),
   odeToJoy(),
   ringAroundTheRosie(),
+  pottyTime(),
 ]) {
   SONGS[song.id] = song;
 }

@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import { PottyActivity } from './potty/PottyActivity';
 import { TimerActivity } from './timer/TimerActivity';
 
 export interface ActivityDef {
@@ -16,5 +17,11 @@ export const activities: ActivityDef[] = [
     title: 'Timer',
     icon: '⏰',
     Component: TimerActivity,
+  },
+  {
+    id: 'potty',
+    title: 'Potty Time',
+    icon: '🚽',
+    Component: PottyActivity,
   },
 ];

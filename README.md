@@ -38,6 +38,16 @@ A Hatch-style visual countdown for little ones who can't read clocks yet:
 Uploaded photos are stored on-device (IndexedDB); settings like mute and the
 chosen character persist across visits (localStorage).
 
+### 🚽 Potty Time
+
+A potty-training cheer button:
+
+- A friendly cartoon potty waits with you while an upbeat jingle loops
+- Tap the big **I went potty!** button and the party erupts: confetti,
+  a big "Yeaaah!", the potty does a happy flush (swirling water), and a
+  synthesized cheer + toilet-flush sound play
+- Mute toggle and screen-wake-lock, same as the timer
+
 ## Development
 
 ```sh

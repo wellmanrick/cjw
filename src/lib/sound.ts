@@ -59,6 +59,105 @@ export function playCelebration() {
   });
 }
 
+/** A short white-noise buffer for water/cheer textures. */
+function noiseBuffer(seconds: number): AudioBuffer {
+  const len = Math.floor(ctx!.sampleRate * seconds);
+  const buf = ctx!.createBuffer(1, len, ctx!.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+  return buf;
+}
+
+/** Whooshy toilet flush: swirling band-passed water noise + a low gurgle. */
+export function playFlush() {
+  if (muted) return;
+  unlockAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  const dur = 2;
+
+  // Swirling water — noise through a bandpass that sweeps up then drains back down.
+  const noise = ctx.createBufferSource();
+  noise.buffer = noiseBuffer(dur);
+  const band = ctx.createBiquadFilter();
+  band.type = 'bandpass';
+  band.Q.value = 1.2;
+  band.frequency.setValueAtTime(420, now);
+  band.frequency.exponentialRampToValueAtTime(1500, now + 0.7);
+  band.frequency.exponentialRampToValueAtTime(280, now + dur);
+  const nGain = ctx.createGain();
+  nGain.gain.setValueAtTime(0, now);
+  nGain.gain.linearRampToValueAtTime(0.16, now + 0.2);
+  nGain.gain.setValueAtTime(0.16, now + dur - 0.5);
+  nGain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+  noise.connect(band).connect(nGain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + dur);
+
+  // Gurgle — a low sine wobbling under the swirl.
+  const gurgle = ctx.createOscillator();
+  const gGain = ctx.createGain();
+  gurgle.type = 'sine';
+  gurgle.frequency.setValueAtTime(95, now);
+  const lfo = ctx.createOscillator();
+  const lfoGain = ctx.createGain();
+  lfo.frequency.value = 7;
+  lfoGain.gain.value = 28;
+  lfo.connect(lfoGain).connect(gurgle.frequency);
+  gGain.gain.setValueAtTime(0, now);
+  gGain.gain.linearRampToValueAtTime(0.07, now + 0.3);
+  gGain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+  gurgle.connect(gGain).connect(ctx.destination);
+  gurgle.start(now);
+  gurgle.stop(now + dur);
+  lfo.start(now);
+  lfo.stop(now + dur);
+}
+
+/** Happy "yeaahhh" cheer: a crowd-ish noise swell + a bright chord sliding up. */
+export function playCheer() {
+  if (muted) return;
+  unlockAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  const dur = 1.3;
+
+  // Crowd swell.
+  const noise = ctx.createBufferSource();
+  noise.buffer = noiseBuffer(dur);
+  const bp = ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.Q.value = 0.8;
+  bp.frequency.setValueAtTime(700, now);
+  bp.frequency.linearRampToValueAtTime(1700, now + 0.5);
+  const ng = ctx.createGain();
+  ng.gain.setValueAtTime(0, now);
+  ng.gain.linearRampToValueAtTime(0.12, now + 0.25);
+  ng.gain.setValueAtTime(0.12, now + 0.7);
+  ng.gain.exponentialRampToValueAtTime(0.001, now + dur);
+  noise.connect(bp).connect(ng).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + dur);
+
+  // Bright "yeah!" chord that scoops up into a major triad.
+  for (const f of [392, 523.25, 659.25]) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const lp = ctx.createBiquadFilter();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(f * 0.8, now);
+    osc.frequency.linearRampToValueAtTime(f, now + 0.3);
+    lp.type = 'lowpass';
+    lp.frequency.value = 2600;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.06, now + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 1);
+    osc.connect(gain).connect(lp).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 1.05);
+  }
+}
+
 /* --- Looped countdown songs (see songs.ts for the library) --- */
 /**
  * Soft music-box note: sine fundamental + quiet octave shimmer + slight
