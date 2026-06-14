@@ -159,37 +159,98 @@ export function playCheer() {
 }
 
 /* --- Looped countdown songs (see songs.ts for the library) --- */
+
 /**
- * Soft music-box note: sine fundamental + quiet octave shimmer + slight
- * detune, through a lowpass so it stays mellow on phone speakers.
+ * A master bus per audio context: notes feed a compressor (to glue the loop
+ * and tame peaks) and a gentle reverb send (so notes ring and blend instead
+ * of sounding bare). Cached per context so the offline render and the live
+ * app share the exact same sound.
+ */
+interface MasterBus {
+  dry: AudioNode;
+  reverb: AudioNode;
+}
+const masterBuses = new WeakMap<BaseAudioContext, MasterBus>();
+
+/** Synthesized impulse response: white noise with an exponential decay tail. */
+function makeImpulse(ac: BaseAudioContext, seconds: number, decay: number): AudioBuffer {
+  const len = Math.floor(ac.sampleRate * seconds);
+  const buf = ac.createBuffer(1, len, ac.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) {
+    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+  }
+  return buf;
+}
+
+function getMaster(ac: BaseAudioContext): MasterBus {
+  let bus = masterBuses.get(ac);
+  if (!bus) {
+    const comp = ac.createDynamicsCompressor();
+    comp.threshold.value = -16;
+    comp.knee.value = 26;
+    comp.ratio.value = 3;
+    comp.attack.value = 0.006;
+    comp.release.value = 0.22;
+    comp.connect(ac.destination);
+
+    const conv = ac.createConvolver();
+    conv.buffer = makeImpulse(ac, 1.7, 2.6);
+    const wet = ac.createGain();
+    wet.gain.value = 0.26;
+    conv.connect(wet).connect(comp);
+
+    bus = { dry: comp, reverb: conv };
+    masterBuses.set(ac, bus);
+  }
+  return bus;
+}
+
+/**
+ * Warm bell / celesta note: a bright, fast-decaying attack chime over a softer
+ * singing fundamental, lightly detuned for warmth, through a lowpass and into
+ * the master bus (dry + reverb send).
  */
 export function playSongEvent(target: BaseAudioContext, event: SongEvent, beatS: number, when: number) {
-  const duration = Math.min(event.beats * beatS * 1.05, 1.6);
+  const duration = Math.min(event.beats * beatS * 1.1, 1.9);
+  const master = getMaster(target);
+
   const filter = target.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.value = event.voice === 'melody' ? 2400 : 900;
-  filter.connect(target.destination);
+  filter.frequency.value = event.voice === 'melody' ? 3000 : 700;
+  filter.Q.value = 0.4;
+  filter.connect(master.dry);
+  // Reverb send (a little less for the bass so the low end stays tidy).
+  const send = target.createGain();
+  send.gain.value = event.voice === 'melody' ? 1 : 0.4;
+  filter.connect(send).connect(master.reverb);
 
-  const layers: Array<[number, number, OscillatorType]> =
+  // [freq multiple, peak gain, waveform, decay scale] — bigger decay = shorter.
+  const layers: Array<[number, number, OscillatorType, number]> =
     event.voice === 'melody'
       ? [
-          [event.freq, event.gain, 'sine'],
-          [event.freq * 2, event.gain * 0.22, 'sine'],
-          [event.freq * 1.004, event.gain * 0.3, 'triangle'],
+          [1, event.gain, 'sine', 1], // singing fundamental
+          [1.001, event.gain * 0.5, 'triangle', 1.15], // gentle detune warmth
+          [2, event.gain * 0.5, 'sine', 2.4], // bright "ting" attack
+          [3, event.gain * 0.16, 'sine', 4], // sparkle transient
         ]
-      : [[event.freq, event.gain, 'sine']];
+      : [
+          [1, event.gain, 'triangle', 1], // round bass body
+          [0.5, event.gain * 0.4, 'sine', 1], // sub for warmth
+        ];
 
-  for (const [freq, gainValue, type] of layers) {
+  for (const [mult, gainValue, type, decayScale] of layers) {
     const osc = target.createOscillator();
     const gain = target.createGain();
     osc.type = type;
-    osc.frequency.value = freq;
+    osc.frequency.value = event.freq * mult;
+    const tail = Math.max(0.12, duration / decayScale);
     gain.gain.setValueAtTime(0, when);
-    gain.gain.linearRampToValueAtTime(gainValue, when + 0.015);
-    gain.gain.exponentialRampToValueAtTime(0.001, when + duration);
+    gain.gain.linearRampToValueAtTime(gainValue, when + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.001, when + tail);
     osc.connect(gain).connect(filter);
     osc.start(when);
-    osc.stop(when + duration + 0.05);
+    osc.stop(when + tail + 0.05);
   }
 }
 
