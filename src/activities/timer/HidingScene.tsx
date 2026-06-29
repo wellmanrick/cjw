@@ -1,6 +1,7 @@
 import { CharacterDisplay } from './CharacterDisplay';
 import type { Mood } from './characters';
 import { hidingSpots, spotForCharacter, type SpotId } from './hidingSpots';
+import './revealEffects.css';
 import styles from './timer.module.css';
 
 interface Props {
@@ -15,23 +16,23 @@ interface Props {
 function revealEffectClass(spotId: SpotId): string {
   switch (spotId) {
     case 'barn':
-      return styles.revealBarn;
+      return 'reveal-barn';
     case 'pond':
-      return styles.revealSplash;
+      return 'reveal-splash';
     case 'mud':
-      return styles.revealMud;
+      return 'reveal-mud';
     case 'waves':
-      return styles.revealWave;
+      return 'reveal-wave';
     case 'dirtpile':
-      return styles.revealDirt;
+      return 'reveal-dirt';
     case 'doghouse':
-      return styles.revealDoghouse;
+      return 'reveal-doghouse';
     case 'bush':
-      return styles.revealBush;
+      return 'reveal-bush';
     case 'hat':
-      return styles.revealMagic;
+      return 'reveal-magic';
     case 'garage':
-      return styles.revealGarage;
+      return 'reveal-garage';
     default:
       return '';
   }
@@ -60,7 +61,7 @@ export function HidingScene({ characterId, mood, revealed, excited = false }: Pr
 
   return (
     <div className={styles.scene} aria-label={revealed ? undefined : spot.name} data-revealed={revealed}>
-      {spot.back && <div className={`${styles.spotLayer} ${revealed ? styles.revealBackdrop : ''}`}>{spot.back}</div>}
+      {spot.back && <div className={`${styles.spotLayer} ${revealed ? 'reveal-backdrop' : ''}`}>{spot.back}</div>}
       <div className={`${styles.characterHolder} ${characterState}`}>
         <CharacterDisplay characterId={characterId} mood={mood} />
       </div>
