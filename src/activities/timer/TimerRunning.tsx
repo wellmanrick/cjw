@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { HoldButton } from '../../components/HoldButton';
 import { songForCharacter } from '../../lib/songs';
-import { startSong, stopSong } from '../../lib/sound';
+import { playAnimalStinger, playUrgencyAccent, startSong, stopSong } from '../../lib/sound';
 import { useWakeLock } from '../../lib/useWakeLock';
 import { CountdownRing } from './CountdownRing';
 import { HidingScene } from './HidingScene';
@@ -44,6 +44,24 @@ export function TimerRunning({
     startSong(songForCharacter(characterId));
     return stopSong;
   }, [characterId]);
+
+  // A small animal/machine sound now and then makes each character feel alive.
+  useEffect(() => {
+    const first = window.setTimeout(() => playAnimalStinger(characterId), 1800);
+    const loop = window.setInterval(() => playAnimalStinger(characterId), 7000);
+    return () => {
+      window.clearTimeout(first);
+      window.clearInterval(loop);
+    };
+  }, [characterId]);
+
+  // The final stretch gets brighter so toddlers can feel the reveal coming.
+  useEffect(() => {
+    if (!lastTen) return;
+    playUrgencyAccent();
+    const loop = window.setInterval(playUrgencyAccent, 1000);
+    return () => window.clearInterval(loop);
+  }, [lastTen]);
 
   return (
     <div className={`screen ${styles.runningScreen}`}>
