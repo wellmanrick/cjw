@@ -1,6 +1,7 @@
 import { CharacterDisplay } from './CharacterDisplay';
 import type { Mood } from './characters';
-import { hidingSpots, spotForCharacter } from './hidingSpots';
+import { hidingSpots, spotForCharacter, type SpotId } from './hidingSpots';
+import './revealEffects.css';
 import styles from './timer.module.css';
 
 interface Props {
@@ -12,14 +13,42 @@ interface Props {
   excited?: boolean;
 }
 
+/** A per-spot flourish that plays on the scenery at the reveal moment. */
+function revealEffectClass(spotId: SpotId): string {
+  switch (spotId) {
+    case 'barn':
+      return 'reveal-barn';
+    case 'pond':
+      return 'reveal-splash';
+    case 'mud':
+      return 'reveal-mud';
+    case 'waves':
+      return 'reveal-wave';
+    case 'dirtpile':
+      return 'reveal-dirt';
+    case 'doghouse':
+      return 'reveal-doghouse';
+    case 'bush':
+      return 'reveal-bush';
+    case 'hat':
+      return 'reveal-magic';
+    case 'garage':
+      return 'reveal-garage';
+    default:
+      return '';
+  }
+}
+
 /**
  * The surprise: during the countdown the character hides in its spot
  * (chick in the egg, frog in the pond, cow behind the barn...), peeking out
  * now and then, and pops out when the timer finishes.
  */
 export function HidingScene({ characterId, mood, revealed, excited = false }: Props) {
-  const spot = hidingSpots[spotForCharacter(characterId)];
+  const spotId = spotForCharacter(characterId);
+  const spot = hidingSpots[spotId];
   const hasLid = Boolean(spot.lid);
+  const revealEffect = revealed ? revealEffectClass(spotId) : '';
 
   const characterState = revealed
     ? spot.reveal === 'above'
@@ -32,12 +61,14 @@ export function HidingScene({ characterId, mood, revealed, excited = false }: Pr
   const sceneryWiggle = revealed ? '' : excited ? styles.spotWiggleFast : styles.spotWiggleSlow;
 
   return (
-    <div className={styles.scene} aria-label={revealed ? undefined : spot.name}>
-      {spot.back && <div className={styles.spotLayer}>{spot.back}</div>}
+    <div className={styles.scene} aria-label={revealed ? undefined : spot.name} data-revealed={revealed}>
+      {spot.back && (
+        <div className={`${styles.spotLayer} ${revealed ? 'reveal-backdrop' : ''}`}>{spot.back}</div>
+      )}
       <div className={`${styles.characterHolder} ${characterState}`}>
         <CharacterDisplay characterId={characterId} mood={mood} />
       </div>
-      <div className={`${styles.spotLayer} ${sceneryWiggle}`}>{spot.front}</div>
+      <div className={`${styles.spotLayer} ${sceneryWiggle} ${revealEffect}`}>{spot.front}</div>
       {spot.lid && (
         <div
           className={`${styles.spotLayer} ${

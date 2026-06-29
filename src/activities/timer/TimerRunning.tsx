@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { HoldButton } from '../../components/HoldButton';
 import { songForCharacter } from '../../lib/songs';
-import { startSong, stopSong } from '../../lib/sound';
+import { playAnimalStinger, playUrgencyAccent, startSong, stopSong } from '../../lib/sound';
 import { useWakeLock } from '../../lib/useWakeLock';
 import { CountdownRing } from './CountdownRing';
 import { HidingScene } from './HidingScene';
@@ -44,6 +44,24 @@ export function TimerRunning({
     startSong(songForCharacter(characterId));
     return stopSong;
   }, [characterId]);
+
+  // The character calls out now and then — a moo, a woof, a quack — over the song.
+  useEffect(() => {
+    const first = window.setTimeout(() => playAnimalStinger(characterId), 1800);
+    const loop = window.setInterval(() => playAnimalStinger(characterId), 7000);
+    return () => {
+      window.clearTimeout(first);
+      window.clearInterval(loop);
+    };
+  }, [characterId]);
+
+  // A gentle accent in the final stretch (mute is read live inside the call).
+  useEffect(() => {
+    if (!lastTen) return;
+    playUrgencyAccent();
+    const loop = window.setInterval(playUrgencyAccent, 2000);
+    return () => window.clearInterval(loop);
+  }, [lastTen]);
 
   return (
     <div className={`screen ${styles.runningScreen}`}>
