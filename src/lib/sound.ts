@@ -167,6 +167,9 @@ export function playCheer() {
  * app share the exact same sound.
  */
 interface MasterBus {
+  /** Song notes feed this; it can be ducked under a sound effect. */
+  music: GainNode;
+  /** One-shot effects (animal calls, accents) feed this directly. */
   dry: AudioNode;
   reverb: AudioNode;
 }
@@ -200,7 +203,11 @@ function getMaster(ac: BaseAudioContext): MasterBus {
     wet.gain.value = 0.26;
     conv.connect(wet).connect(comp);
 
-    bus = { dry: comp, reverb: conv };
+    const music = ac.createGain();
+    music.gain.value = 1;
+    music.connect(comp);
+
+    bus = { music, dry: comp, reverb: conv };
     masterBuses.set(ac, bus);
   }
   return bus;
@@ -219,7 +226,7 @@ export function playSongEvent(target: BaseAudioContext, event: SongEvent, beatS:
   filter.type = 'lowpass';
   filter.frequency.value = event.voice === 'melody' ? 3000 : 700;
   filter.Q.value = 0.4;
-  filter.connect(master.dry);
+  filter.connect(master.music);
   // Reverb send (a little less for the bass so the low end stays tidy).
   const send = target.createGain();
   send.gain.value = event.voice === 'melody' ? 1 : 0.4;
@@ -252,6 +259,150 @@ export function playSongEvent(target: BaseAudioContext, event: SongEvent, beatS:
     osc.start(when);
     osc.stop(when + tail + 0.05);
   }
+}
+
+/* --- Character sound effects (animal calls, urgency accents) --- */
+
+/** A pitched effect tone, routed through the shared master (dry + reverb). */
+function fxChirp(
+  ac: BaseAudioContext,
+  startAt: number,
+  from: number,
+  to: number,
+  duration: number,
+  gainValue: number,
+  type: OscillatorType = 'sine',
+) {
+  const master = getMaster(ac);
+  const osc = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(from, startAt);
+  if (to !== from) osc.frequency.exponentialRampToValueAtTime(to, startAt + duration);
+  gain.gain.setValueAtTime(0, startAt);
+  gain.gain.linearRampToValueAtTime(gainValue, startAt + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.001, startAt + duration);
+  osc.connect(gain).connect(master.dry);
+  const send = ac.createGain();
+  send.gain.value = 0.25;
+  gain.connect(send).connect(master.reverb);
+  osc.start(startAt);
+  osc.stop(startAt + duration + 0.05);
+}
+
+/** A band-passed noise burst (growls, splashes), routed through the master. */
+function fxNoiseBurst(
+  ac: BaseAudioContext,
+  startAt: number,
+  duration: number,
+  gainValue: number,
+  frequency: number,
+) {
+  const master = getMaster(ac);
+  const source = ac.createBufferSource();
+  source.buffer = makeImpulse(ac, duration, 0); // flat white-noise window
+  const band = ac.createBiquadFilter();
+  band.type = 'bandpass';
+  band.frequency.value = frequency;
+  band.Q.value = 1.8;
+  const gain = ac.createGain();
+  gain.gain.setValueAtTime(0, startAt);
+  gain.gain.linearRampToValueAtTime(gainValue, startAt + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, startAt + duration);
+  source.connect(band).connect(gain).connect(master.dry);
+  const send = ac.createGain();
+  send.gain.value = 0.2;
+  gain.connect(send).connect(master.reverb);
+  source.start(startAt);
+  source.stop(startAt + duration);
+}
+
+/**
+ * Schedule a character's signature call into a context at a given time.
+ * Exported so the offline renderer can preview each animal; the live app
+ * uses playAnimalStinger() below.
+ */
+export function scheduleAnimalStinger(ac: BaseAudioContext, characterId: string, now: number) {
+  switch (characterId) {
+    case 'builtin:cow':
+      fxChirp(ac, now, 180, 105, 0.42, 0.13, 'sine');
+      fxChirp(ac, now + 0.06, 245, 130, 0.38, 0.05, 'triangle');
+      break;
+    case 'builtin:dog':
+      fxChirp(ac, now, 270, 155, 0.13, 0.14, 'square');
+      fxChirp(ac, now + 0.18, 310, 170, 0.12, 0.1, 'square');
+      break;
+    case 'builtin:duck':
+      fxChirp(ac, now, 620, 360, 0.12, 0.11, 'sawtooth');
+      fxChirp(ac, now + 0.14, 560, 330, 0.12, 0.09, 'sawtooth');
+      break;
+    case 'builtin:frog':
+      fxChirp(ac, now, 125, 165, 0.18, 0.11, 'sawtooth');
+      fxChirp(ac, now + 0.2, 135, 180, 0.16, 0.09, 'sawtooth');
+      break;
+    case 'builtin:cat':
+      fxChirp(ac, now, 520, 880, 0.28, 0.09, 'triangle');
+      fxChirp(ac, now + 0.18, 760, 540, 0.28, 0.05, 'sine');
+      break;
+    case 'builtin:pig':
+      fxChirp(ac, now, 210, 170, 0.12, 0.1, 'sawtooth');
+      fxChirp(ac, now + 0.13, 230, 185, 0.12, 0.09, 'sawtooth');
+      break;
+    case 'builtin:shark':
+      fxNoiseBurst(ac, now, 0.5, 0.07, 900);
+      fxChirp(ac, now + 0.05, 360, 520, 0.22, 0.05, 'sine');
+      break;
+    case 'builtin:digger':
+      fxNoiseBurst(ac, now, 0.25, 0.08, 280);
+      fxChirp(ac, now + 0.05, 95, 70, 0.22, 0.08, 'sawtooth');
+      break;
+    case 'builtin:bus':
+      fxChirp(ac, now, 420, 420, 0.16, 0.1, 'square');
+      fxChirp(ac, now + 0.22, 330, 330, 0.16, 0.08, 'square');
+      break;
+    case 'builtin:chick':
+      fxChirp(ac, now, 920, 1180, 0.08, 0.08, 'triangle');
+      fxChirp(ac, now + 0.1, 980, 1320, 0.08, 0.07, 'triangle');
+      break;
+    case 'builtin:monster':
+      fxChirp(ac, now, 95, 65, 0.38, 0.11, 'sawtooth');
+      fxChirp(ac, now + 0.12, 180, 240, 0.2, 0.06, 'square');
+      break;
+    case 'builtin:bunny':
+      fxChirp(ac, now, 700, 920, 0.07, 0.06, 'sine');
+      fxChirp(ac, now + 0.1, 760, 1000, 0.07, 0.05, 'sine');
+      break;
+    default:
+      fxChirp(ac, now, 660, 880, 0.16, 0.06, 'triangle');
+  }
+}
+
+/** Briefly dip the song so a sound effect can land on top of it. */
+function duckMusic() {
+  if (!ctx) return;
+  const m = getMaster(ctx).music.gain;
+  const now = ctx.currentTime;
+  m.cancelScheduledValues(now);
+  m.setValueAtTime(m.value, now);
+  m.linearRampToValueAtTime(0.45, now + 0.05);
+  m.linearRampToValueAtTime(1, now + 0.55);
+}
+
+/** Play the character's signature call live, ducking the song under it. */
+export function playAnimalStinger(characterId: string) {
+  if (muted || !ctx || characterId.startsWith('photo:')) return;
+  unlockAudio();
+  duckMusic();
+  scheduleAnimalStinger(ctx, characterId, ctx.currentTime);
+}
+
+/** A gentle two-note accent for the final seconds of a countdown. */
+export function playUrgencyAccent() {
+  if (muted || !ctx) return;
+  unlockAudio();
+  const now = ctx.currentTime;
+  fxChirp(ctx, now, 880, 880, 0.16, 0.05, 'triangle');
+  fxChirp(ctx, now + 0.09, 1318.5, 1318.5, 0.18, 0.03, 'sine');
 }
 
 /* Lookahead scheduler on the audio clock, so the rhythm never drifts. */

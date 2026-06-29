@@ -13,6 +13,7 @@ interface Props {
   excited?: boolean;
 }
 
+/** A per-spot flourish that plays on the scenery at the reveal moment. */
 function revealEffectClass(spotId: SpotId): string {
   switch (spotId) {
     case 'barn':
@@ -61,7 +62,9 @@ export function HidingScene({ characterId, mood, revealed, excited = false }: Pr
 
   return (
     <div className={styles.scene} aria-label={revealed ? undefined : spot.name} data-revealed={revealed}>
-      {spot.back && <div className={`${styles.spotLayer} ${revealed ? 'reveal-backdrop' : ''}`}>{spot.back}</div>}
+      {spot.back && (
+        <div className={`${styles.spotLayer} ${revealed ? 'reveal-backdrop' : ''}`}>{spot.back}</div>
+      )}
       <div className={`${styles.characterHolder} ${characterState}`}>
         <CharacterDisplay characterId={characterId} mood={mood} />
       </div>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { loadSettings, saveSettings } from '../../lib/settings';
-import { playCelebration, setMuted as setSoundMuted, unlockAudio } from '../../lib/sound';
+import { playAnimalStinger, playCelebration, setMuted as setSoundMuted, unlockAudio } from '../../lib/sound';
 import { Celebration } from './Celebration';
 import { TimerRunning } from './TimerRunning';
 import { TimerSetup } from './TimerSetup';
@@ -23,6 +23,10 @@ export function TimerActivity({ onExit }: Props) {
   const timer = useCountdown();
   const celebratedRef = useRef(false);
 
+  // activeCharacterId is set in handleStart; the fallback only guards first render.
+  const roundCharacterId =
+    activeCharacterId ?? (settings.characterId === 'surprise' ? builtinCharacters[0].id : settings.characterId);
+
   useEffect(() => {
     setSoundMuted(settings.muted);
   }, [settings.muted]);
@@ -31,9 +35,12 @@ export function TimerActivity({ onExit }: Props) {
     if (timer.status === 'done' && !celebratedRef.current) {
       celebratedRef.current = true;
       playCelebration();
+      // The character calls out as it bursts from its hiding spot.
+      const id = window.setTimeout(() => playAnimalStinger(roundCharacterId), 650);
+      return () => window.clearTimeout(id);
     }
     if (timer.status !== 'done') celebratedRef.current = false;
-  }, [timer.status]);
+  }, [timer.status, roundCharacterId]);
 
   const handleStart = (durationMs: number) => {
     unlockAudio();
@@ -41,10 +48,6 @@ export function TimerActivity({ onExit }: Props) {
     setSettings(saveSettings({ lastDurationMs: durationMs }));
     timer.start(durationMs);
   };
-
-  // activeCharacterId is set in handleStart; the fallback only guards first render.
-  const roundCharacterId =
-    activeCharacterId ?? (settings.characterId === 'surprise' ? builtinCharacters[0].id : settings.characterId);
 
   if (timer.status === 'running' || timer.status === 'paused') {
     return (
