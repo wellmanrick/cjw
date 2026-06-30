@@ -360,57 +360,61 @@ function fxNoiseBurst(
  * uses playAnimalStinger() below.
  */
 export function scheduleAnimalStinger(ac: BaseAudioContext, characterId: string, now: number) {
+  // Calls are loud and pitched into a phone-speaker-friendly range (~200Hz+),
+  // since tiny speakers can't reproduce the low fundamentals of a real moo/growl.
   switch (characterId) {
-    case 'builtin:cow':
-      fxChirp(ac, now, 180, 105, 0.42, 0.13, 'sine');
-      fxChirp(ac, now + 0.06, 245, 130, 0.38, 0.05, 'triangle');
+    case 'builtin:cow': // mooooo (a long downward glide)
+      fxChirp(ac, now, 330, 210, 0.5, 0.34, 'sine');
+      fxChirp(ac, now + 0.04, 420, 264, 0.46, 0.18, 'triangle');
       break;
-    case 'builtin:dog':
-      fxChirp(ac, now, 270, 155, 0.13, 0.14, 'square');
-      fxChirp(ac, now + 0.18, 310, 170, 0.12, 0.1, 'square');
+    case 'builtin:dog': // woof woof
+      fxChirp(ac, now, 340, 200, 0.14, 0.36, 'square');
+      fxChirp(ac, now + 0.2, 360, 210, 0.13, 0.32, 'square');
       break;
-    case 'builtin:duck':
-      fxChirp(ac, now, 620, 360, 0.12, 0.11, 'sawtooth');
-      fxChirp(ac, now + 0.14, 560, 330, 0.12, 0.09, 'sawtooth');
+    case 'builtin:duck': // quack quack
+      fxChirp(ac, now, 720, 430, 0.14, 0.3, 'sawtooth');
+      fxChirp(ac, now + 0.17, 690, 410, 0.13, 0.28, 'sawtooth');
       break;
-    case 'builtin:frog':
-      fxChirp(ac, now, 125, 165, 0.18, 0.11, 'sawtooth');
-      fxChirp(ac, now + 0.2, 135, 180, 0.16, 0.09, 'sawtooth');
+    case 'builtin:frog': // rib-bit
+      fxChirp(ac, now, 240, 330, 0.18, 0.32, 'sawtooth');
+      fxChirp(ac, now + 0.22, 260, 350, 0.18, 0.3, 'sawtooth');
       break;
-    case 'builtin:cat':
-      fxChirp(ac, now, 520, 880, 0.28, 0.09, 'triangle');
-      fxChirp(ac, now + 0.18, 760, 540, 0.28, 0.05, 'sine');
+    case 'builtin:cat': // mee-ow
+      fxChirp(ac, now, 560, 920, 0.24, 0.26, 'triangle');
+      fxChirp(ac, now + 0.2, 880, 540, 0.32, 0.22, 'triangle');
       break;
-    case 'builtin:pig':
-      fxChirp(ac, now, 210, 170, 0.12, 0.1, 'sawtooth');
-      fxChirp(ac, now + 0.13, 230, 185, 0.12, 0.09, 'sawtooth');
+    case 'builtin:pig': // oink oink
+      fxChirp(ac, now, 300, 230, 0.14, 0.32, 'sawtooth');
+      fxChirp(ac, now + 0.15, 320, 240, 0.14, 0.3, 'sawtooth');
       break;
-    case 'builtin:shark':
-      fxNoiseBurst(ac, now, 0.5, 0.07, 900);
-      fxChirp(ac, now + 0.05, 360, 520, 0.22, 0.05, 'sine');
+    case 'builtin:shark': // chomp chomp
+      fxNoiseBurst(ac, now, 0.14, 0.26, 1500);
+      fxNoiseBurst(ac, now + 0.22, 0.14, 0.24, 1200);
+      fxChirp(ac, now, 320, 220, 0.3, 0.16, 'sine');
       break;
-    case 'builtin:digger':
-      fxNoiseBurst(ac, now, 0.25, 0.08, 280);
-      fxChirp(ac, now + 0.05, 95, 70, 0.22, 0.08, 'sawtooth');
+    case 'builtin:digger': // beep beep (reversing) over a soft rumble
+      fxChirp(ac, now, 740, 740, 0.16, 0.3, 'square');
+      fxChirp(ac, now + 0.26, 740, 740, 0.16, 0.3, 'square');
+      fxNoiseBurst(ac, now, 0.45, 0.07, 380);
       break;
-    case 'builtin:bus':
-      fxChirp(ac, now, 420, 420, 0.16, 0.1, 'square');
-      fxChirp(ac, now + 0.22, 330, 330, 0.16, 0.08, 'square');
+    case 'builtin:bus': // honk honk
+      fxChirp(ac, now, 420, 400, 0.18, 0.32, 'square');
+      fxChirp(ac, now + 0.24, 340, 320, 0.18, 0.3, 'square');
       break;
-    case 'builtin:chick':
-      fxChirp(ac, now, 920, 1180, 0.08, 0.08, 'triangle');
-      fxChirp(ac, now + 0.1, 980, 1320, 0.08, 0.07, 'triangle');
+    case 'builtin:chick': // cheep cheep
+      fxChirp(ac, now, 1000, 1320, 0.09, 0.22, 'triangle');
+      fxChirp(ac, now + 0.12, 1060, 1400, 0.09, 0.2, 'triangle');
       break;
-    case 'builtin:monster':
-      fxChirp(ac, now, 95, 65, 0.38, 0.11, 'sawtooth');
-      fxChirp(ac, now + 0.12, 180, 240, 0.2, 0.06, 'square');
+    case 'builtin:monster': // silly growl + giggle
+      fxChirp(ac, now, 210, 150, 0.38, 0.3, 'sawtooth');
+      fxChirp(ac, now + 0.18, 320, 460, 0.18, 0.22, 'square');
       break;
-    case 'builtin:bunny':
-      fxChirp(ac, now, 700, 920, 0.07, 0.06, 'sine');
-      fxChirp(ac, now + 0.1, 760, 1000, 0.07, 0.05, 'sine');
+    case 'builtin:bunny': // boing boing
+      fxChirp(ac, now, 500, 950, 0.13, 0.22, 'sine');
+      fxChirp(ac, now + 0.15, 560, 1020, 0.13, 0.2, 'sine');
       break;
     default:
-      fxChirp(ac, now, 660, 880, 0.16, 0.06, 'triangle');
+      fxChirp(ac, now, 660, 880, 0.18, 0.2, 'triangle');
   }
 }
 
@@ -421,8 +425,8 @@ function duckMusic() {
   const now = ctx.currentTime;
   m.cancelScheduledValues(now);
   m.setValueAtTime(m.value, now);
-  m.linearRampToValueAtTime(0.45, now + 0.05);
-  m.linearRampToValueAtTime(1, now + 0.55);
+  m.linearRampToValueAtTime(0.3, now + 0.05);
+  m.linearRampToValueAtTime(1, now + 0.7);
 }
 
 /** Play the character's signature call live, ducking the song under it. */
