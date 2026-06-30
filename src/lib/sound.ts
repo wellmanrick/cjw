@@ -11,6 +11,43 @@ export function setMuted(value: boolean) {
 export function unlockAudio() {
   if (!ctx) ctx = new AudioContext();
   if (ctx.state === 'suspended') void ctx.resume();
+  // iOS (especially a home-screen PWA) only truly unlocks once an actual node
+  // has played inside a user gesture — resume() alone leaves it silent.
+  if (!unlockKicked && ctx.state !== 'closed') {
+    unlockKicked = true;
+    try {
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+    } catch {
+      unlockKicked = false;
+    }
+  }
+}
+
+let unlockKicked = false;
+let unlockInstalled = false;
+
+/**
+ * Make audio resilient on mobile: resume the context on the first touch/click
+ * anywhere, and again whenever the app returns to the foreground (iOS suspends
+ * audio when backgrounded or when launched from the home screen). Call once at
+ * startup; idempotent.
+ */
+export function installAudioUnlock() {
+  if (unlockInstalled || typeof document === 'undefined') return;
+  unlockInstalled = true;
+  const resume = () => unlockAudio();
+  document.addEventListener('pointerdown', resume, { passive: true });
+  document.addEventListener('touchend', resume, { passive: true });
+  document.addEventListener('click', resume, { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && ctx && ctx.state === 'suspended') {
+      void ctx.resume();
+    }
+  });
 }
 
 function playNote(frequency: number, startAt: number, duration: number, gainValue: number) {
