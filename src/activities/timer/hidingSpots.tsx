@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components -- data registry;
+   the SVG components are implementation details. */
 import type { ReactNode } from 'react';
 import { getBuiltinCharacter } from './characters';
 import styles from './timer.module.css';
@@ -49,9 +51,75 @@ const svgProps = {
 /* Zigzag-cracked egg, drawn as a bottom shell (front) and a top shell (lid). */
 const eggCrack = 'L 32 58 L 39 64 L 46 57 L 53 64 L 60 57 L 67 64 L 74 58';
 
+
+/* --- Backdrop helpers: every scene gets a soft rounded sky panel --- */
+
+function Sky({ fill }: { fill: string }) {
+  return <rect x="2" y="2" width="96" height="96" rx="26" fill={fill} />;
+}
+
+function Sun({ x, y, r = 8 }: { x: number; y: number; r?: number }) {
+  return (
+    <g>
+      <circle cx={x} cy={y} r={r} fill="#ffd166" stroke={INK} strokeWidth="1.8" />
+      <g stroke="#ffd166" strokeWidth="2.2" strokeLinecap="round" opacity="0.85">
+        <line x1={x} y1={y - r - 6} x2={x} y2={y - r - 2.5} />
+        <line x1={x - r - 5.5} y1={y - r * 0.8} x2={x - r - 2.5} y2={y - r * 0.55} />
+        <line x1={x + r + 5.5} y1={y - r * 0.8} x2={x + r + 2.5} y2={y - r * 0.55} />
+      </g>
+    </g>
+  );
+}
+
+function Cloud({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s})`}>
+      <g className={styles.cloudDrift}>
+        <ellipse cx="0" cy="0" rx="9.5" ry="4.6" fill="#fff" stroke={INK} strokeWidth="1.6" />
+        <ellipse cx="7" cy="-3" rx="7" ry="4" fill="#fff" stroke={INK} strokeWidth="1.6" />
+      </g>
+    </g>
+  );
+}
+
+function GrassHills() {
+  return (
+    <g>
+      <ellipse cx="32" cy="99" rx="34" ry="15" fill="#a5d693" />
+      <ellipse cx="72" cy="101" rx="30" ry="14" fill="#8fca7d" />
+    </g>
+  );
+}
+
+function TwinkleStar({ x, y, s = 1, delay = 0 }: { x: number; y: number; s?: number; delay?: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s})`}>
+      <path
+        className={styles.twinkleDot}
+        style={{ animationDelay: `${delay}s` }}
+        d="M 0 -4 L 1.1 -1.1 L 4 0 L 1.1 1.1 L 0 4 L -1.1 1.1 L -4 0 L -1.1 -1.1 Z"
+        fill="#ffd166"
+        stroke={INK}
+        strokeWidth="0.8"
+      />
+    </g>
+  );
+}
+
 export const hidingSpots: Record<SpotId, HidingSpot> = {
   egg: {
     name: 'Egg',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#fdf4e6" />
+        <Sun x={78} y={22} r={7} />
+        <g stroke="#e0b96a" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.8">
+          <path d="M 16 90 q 10 -4 20 -1" />
+          <path d="M 62 92 q 12 -5 22 -2" />
+          <path d="M 24 94 q 14 -3 26 0" />
+        </g>
+      </svg>
+    ),
     reveal: 'inside',
     front: (
       <svg {...svgProps}>
@@ -72,6 +140,8 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
     reveal: 'above',
     back: (
       <svg {...svgProps}>
+        <Sky fill="#e4f5fb" />
+        <Sun x={22} y={22} r={7} />
         <g stroke="#5e8c4a" strokeWidth="3" strokeLinecap="round">
           <line x1="16" y1="70" x2="16" y2="44" />
           <line x1="86" y1="74" x2="86" y2="52" />
@@ -93,6 +163,15 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   hat: {
     name: 'Magic hat',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#f3ecfb" />
+        <TwinkleStar x={20} y={26} s={1.4} />
+        <TwinkleStar x={80} y={20} s={1.1} delay={0.9} />
+        <TwinkleStar x={66} y={38} s={0.9} delay={1.6} />
+        <TwinkleStar x={32} y={44} s={0.8} delay={0.5} />
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -111,6 +190,16 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   cave: {
     name: 'Cave',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#34345c" />
+        <circle cx="74" cy="24" r="10" fill="#fdf3d7" />
+        <circle cx="69" cy="21" r="9" fill="#34345c" />
+        <TwinkleStar x={24} y={22} s={1.2} />
+        <TwinkleStar x={44} y={34} s={0.8} delay={1.2} />
+        <TwinkleStar x={86} y={44} s={0.9} delay={0.6} />
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -126,6 +215,19 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   bush: {
     name: 'Bush',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#eef8ea" />
+        <Sun x={22} y={22} r={7} />
+        <g transform="translate(72 34)">
+          <g className={styles.cloudDrift}>
+            <ellipse cx="-3" cy="0" rx="3.2" ry="4.4" fill="#f0708d" stroke={INK} strokeWidth="1.4" transform="rotate(-30)" />
+            <ellipse cx="3" cy="0" rx="3.2" ry="4.4" fill="#f4a7bb" stroke={INK} strokeWidth="1.4" transform="rotate(30)" />
+            <line x1="0" y1="2" x2="0" y2="6" stroke={INK} strokeWidth="1.4" strokeLinecap="round" />
+          </g>
+        </g>
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -151,6 +253,14 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   barn: {
     name: 'Barn',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#fdf2df" />
+        <Sun x={20} y={22} r={8} />
+        <Cloud x={70} y={24} />
+        <GrassHills />
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -166,6 +276,14 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   doghouse: {
     name: 'Doghouse',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#e9f4fd" />
+        <Sun x={80} y={22} r={7} />
+        <Cloud x={26} y={24} />
+        <GrassHills />
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -187,6 +305,13 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   garage: {
     name: 'Garage',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#e7eef7" />
+        <Cloud x={26} y={22} />
+        <Cloud x={74} y={32} s={0.75} />
+      </svg>
+    ),
     reveal: 'above',
     lidStyle: 'slide',
     front: (
@@ -216,6 +341,14 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   mud: {
     name: 'Mud puddle',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#f8f0e0" />
+        <Sun x={22} y={22} r={7} />
+        <Cloud x={72} y={26} s={0.9} />
+        <GrassHills />
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -233,6 +366,17 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   box: {
     name: 'Cardboard box',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#f4efe7" />
+        <g opacity="0.55">
+          <circle cx="22" cy="26" r="4" fill="#d8a657" />
+          <circle cx="76" cy="20" r="3" fill="#8bd3dd" />
+          <circle cx="60" cy="36" r="2.5" fill="#f0708d" />
+          <circle cx="34" cy="42" r="2.5" fill="#ffd166" />
+        </g>
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -257,6 +401,17 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   toybox: {
     name: 'Toy chest',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#fdeff3" />
+        <g opacity="0.6">
+          <circle cx="24" cy="24" r="4" fill="#8bd3dd" />
+          <circle cx="74" cy="20" r="3.2" fill="#ffd166" />
+          <circle cx="58" cy="34" r="2.6" fill="#b388eb" />
+          <circle cx="36" cy="42" r="2.6" fill="#f0708d" />
+        </g>
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -281,6 +436,13 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   dirtpile: {
     name: 'Dirt pile',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#e9f4fd" />
+        <Sun x={22} y={22} r={8} />
+        <Cloud x={72} y={26} />
+      </svg>
+    ),
     reveal: 'above',
     front: (
       <svg {...svgProps}>
@@ -312,7 +474,7 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
           <line x1="69" y1="22" x2="72" y2="25" />
           <line x1="91" y1="22" x2="88" y2="25" />
         </g>
-        <g fill="#fff" stroke={INK} strokeWidth="1.6" opacity="0.9">
+        <g className={styles.cloudDrift} fill="#fff" stroke={INK} strokeWidth="1.6" opacity="0.9">
           <ellipse cx="22" cy="30" rx="9" ry="4.5" />
           <ellipse cx="29" cy="27" rx="7" ry="4" />
         </g>
@@ -334,6 +496,18 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
   },
   gift: {
     name: 'Present',
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#fdeff3" />
+        <g stroke={INK} strokeWidth="1.2">
+          <path d="M 10 12 L 22 12 L 16 22 Z" fill="#8bd3dd" />
+          <path d="M 30 12 L 42 12 L 36 22 Z" fill="#ffd166" />
+          <path d="M 50 12 L 62 12 L 56 22 Z" fill="#f0708d" />
+          <path d="M 70 12 L 82 12 L 76 22 Z" fill="#b388eb" />
+        </g>
+        <path d="M 8 11.5 L 88 11.5" stroke={INK} strokeWidth="1.4" />
+      </svg>
+    ),
     reveal: 'inside',
     front: (
       <svg {...svgProps}>

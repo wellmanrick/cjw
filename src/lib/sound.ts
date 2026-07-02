@@ -256,6 +256,14 @@ function getMaster(ac: BaseAudioContext): MasterBus {
  * the master bus (dry + reverb send).
  */
 export function playSongEvent(target: BaseAudioContext, event: SongEvent, beatS: number, when: number) {
+  // Deterministic per-note humanization (hash of time+pitch) so playback
+  // breathes a little instead of sounding machine-perfect, while offline
+  // renders still match the live app exactly.
+  const h = Math.sin(when * 12.9898 + event.freq * 0.017) * 43758.5453;
+  const jitter = h - Math.floor(h); // 0..1
+  const humanGain = 0.88 + 0.24 * jitter;
+  when += jitter * 0.014;
+
   const duration = Math.min(event.beats * beatS * 1.1, 1.9);
   const master = getMaster(target);
 
@@ -290,7 +298,7 @@ export function playSongEvent(target: BaseAudioContext, event: SongEvent, beatS:
     osc.frequency.value = event.freq * mult;
     const tail = Math.max(0.12, duration / decayScale);
     gain.gain.setValueAtTime(0, when);
-    gain.gain.linearRampToValueAtTime(gainValue, when + 0.008);
+    gain.gain.linearRampToValueAtTime(gainValue * humanGain, when + 0.008);
     gain.gain.exponentialRampToValueAtTime(0.001, when + tail);
     osc.connect(gain).connect(filter);
     osc.start(when);
@@ -424,6 +432,57 @@ export function scheduleAnimalStinger(ac: BaseAudioContext, characterId: string,
     default:
       fxChirp(ac, now, 660, 880, 0.18, 0.2, 'triangle');
   }
+}
+
+/**
+ * A signature sound for the reveal moment, matched to the hiding spot —
+ * exported (with a context param) so it can be previewed offline.
+ */
+export function scheduleRevealSound(ac: BaseAudioContext, spotId: string, now: number) {
+  switch (spotId) {
+    case 'pond':
+    case 'waves':
+    case 'mud': // sploosh! + droplets
+      fxNoiseBurst(ac, now, 0.3, 0.34, 1100);
+      fxChirp(ac, now + 0.02, 520, 220, 0.24, 0.16, 'sine');
+      fxChirp(ac, now + 0.18, 1250, 1550, 0.06, 0.12, 'sine');
+      fxChirp(ac, now + 0.28, 1050, 1350, 0.06, 0.1, 'sine');
+      break;
+    case 'egg': // crack-crack!
+      fxNoiseBurst(ac, now, 0.05, 0.4, 2500);
+      fxNoiseBurst(ac, now + 0.09, 0.06, 0.36, 2100);
+      fxChirp(ac, now + 0.16, 380, 900, 0.12, 0.18, 'sine');
+      break;
+    case 'hat': // magic sparkle glissando
+      for (let i = 0; i < 5; i++) {
+        fxChirp(ac, now + i * 0.06, 620 * Math.pow(1.26, i), 660 * Math.pow(1.26, i), 0.16, 0.14, 'sine');
+      }
+      fxNoiseBurst(ac, now, 0.3, 0.07, 3200);
+      break;
+    case 'garage': // roll-up door rattle
+      for (let i = 0; i < 4; i++) fxNoiseBurst(ac, now + i * 0.07, 0.05, 0.2, 700);
+      fxChirp(ac, now, 210, 170, 0.3, 0.14, 'sawtooth');
+      break;
+    case 'toybox':
+    case 'gift':
+    case 'box': // boing!
+      fxChirp(ac, now, 260, 720, 0.16, 0.3, 'triangle');
+      fxChirp(ac, now + 0.16, 700, 480, 0.14, 0.2, 'triangle');
+      break;
+    case 'bush': // leafy rustle
+      for (let i = 0; i < 3; i++) fxNoiseBurst(ac, now + i * 0.06, 0.07, 0.18, 2000);
+      break;
+    default: // barn, doghouse, cave, dirtpile: a friendly whoosh-pop
+      fxNoiseBurst(ac, now, 0.16, 0.2, 500);
+      fxChirp(ac, now + 0.05, 300, 620, 0.14, 0.18, 'sine');
+  }
+}
+
+/** Play the reveal sound live for the given hiding spot. */
+export function playRevealSound(spotId: string) {
+  if (muted || !ctx) return;
+  unlockAudio();
+  scheduleRevealSound(ctx, spotId, ctx.currentTime);
 }
 
 /** Briefly dip the song so a sound effect can land on top of it. */

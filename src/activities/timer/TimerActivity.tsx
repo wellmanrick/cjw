@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { loadSettings, saveSettings } from '../../lib/settings';
-import { playAnimalStinger, playCelebration, setMuted as setSoundMuted, unlockAudio } from '../../lib/sound';
+import { playAnimalStinger, playCelebration, playRevealSound, setMuted as setSoundMuted, unlockAudio } from '../../lib/sound';
 import { Celebration } from './Celebration';
 import { TimerRunning } from './TimerRunning';
 import { TimerSetup } from './TimerSetup';
 import { builtinCharacters } from './characters';
+import { spotForCharacter } from './hidingSpots';
 import { useCountdown } from './useCountdown';
 
 function resolveCharacter(characterId: string): string {
@@ -35,9 +36,13 @@ export function TimerActivity({ onExit }: Props) {
     if (timer.status === 'done' && !celebratedRef.current) {
       celebratedRef.current = true;
       playCelebration();
-      // The character calls out as it bursts from its hiding spot.
-      const id = window.setTimeout(() => playAnimalStinger(roundCharacterId), 650);
-      return () => window.clearTimeout(id);
+      // Splash/crack/rattle as the hiding spot opens, then the character calls out.
+      const spotSound = window.setTimeout(() => playRevealSound(spotForCharacter(roundCharacterId)), 300);
+      const call = window.setTimeout(() => playAnimalStinger(roundCharacterId), 750);
+      return () => {
+        window.clearTimeout(spotSound);
+        window.clearTimeout(call);
+      };
     }
     if (timer.status !== 'done') celebratedRef.current = false;
   }, [timer.status, roundCharacterId]);

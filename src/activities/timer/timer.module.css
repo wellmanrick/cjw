@@ -346,6 +346,40 @@
   }
 }
 
+/* Clouds drift gently side to side. */
+.cloudDrift {
+  animation: cloudDrift 8s ease-in-out infinite alternate;
+  transform-box: fill-box;
+}
+
+@keyframes cloudDrift {
+  from {
+    transform: translateX(-3px);
+  }
+  to {
+    transform: translateX(3px);
+  }
+}
+
+/* Little stars twinkle in scene backdrops. */
+.twinkleDot {
+  animation: twinkleDot 2.6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes twinkleDot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
 /* Celebration sparkles. */
 .sparkle {
   position: absolute;
