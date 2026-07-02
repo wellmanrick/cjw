@@ -388,9 +388,17 @@ export function scheduleAnimalStinger(ac: BaseAudioContext, characterId: string,
       fxChirp(ac, now + 0.15, 320, 240, 0.14, 0.3, 'sawtooth');
       break;
     case 'builtin:shark': // chomp chomp
-      fxNoiseBurst(ac, now, 0.14, 0.26, 1500);
-      fxNoiseBurst(ac, now + 0.22, 0.14, 0.24, 1200);
-      fxChirp(ac, now, 320, 220, 0.3, 0.16, 'sine');
+      fxNoiseBurst(ac, now, 0.14, 0.42, 1500);
+      fxNoiseBurst(ac, now + 0.22, 0.14, 0.38, 1200);
+      fxChirp(ac, now, 320, 220, 0.3, 0.22, 'sine');
+      break;
+    case 'builtin:bear': // sleepy growl-yawn
+      fxChirp(ac, now, 280, 180, 0.55, 0.3, 'sawtooth');
+      fxChirp(ac, now + 0.1, 220, 160, 0.5, 0.16, 'triangle');
+      break;
+    case 'builtin:fox': // yip yip!
+      fxChirp(ac, now, 620, 980, 0.09, 0.3, 'square');
+      fxChirp(ac, now + 0.14, 680, 1040, 0.09, 0.28, 'square');
       break;
     case 'builtin:digger': // beep beep (reversing) over a soft rumble
       fxChirp(ac, now, 740, 740, 0.16, 0.3, 'square');

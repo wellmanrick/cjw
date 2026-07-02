@@ -36,6 +36,9 @@
 .toilet {
   width: min(74vw, 46vh, 340px);
   aspect-ratio: 1;
+}
+
+.sitScreen .toilet {
   margin-top: auto;
 }
 
