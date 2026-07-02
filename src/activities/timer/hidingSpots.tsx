@@ -305,7 +305,7 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
     reveal: 'above',
     back: (
       <svg {...svgProps}>
-        <rect x="0" y="0" width="100" height="100" fill="#dff1fb" />
+        <rect x="2" y="2" width="96" height="96" rx="26" fill="#dff1fb" />
         <circle cx="80" cy="30" r="9" fill="#ffd166" stroke={INK} strokeWidth="1.8" />
         <g stroke="#ffd166" strokeWidth="2.4" strokeLinecap="round" opacity="0.8">
           <line x1="80" y1="16" x2="80" y2="20" />
@@ -320,8 +320,8 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
     ),
     front: (
       <svg {...svgProps}>
-        <path d="M 4 74 Q 12 64 22 72 Q 32 64 42 72 Q 52 64 62 72 Q 72 64 82 72 Q 92 64 96 72 L 96 96 L 4 96 Z" fill="#5fa8d3" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
-        <path d="M 4 82 Q 14 74 24 81 Q 34 74 44 81 Q 54 74 64 81 Q 74 74 84 81 Q 92 76 96 81 L 96 96 L 4 96 Z" fill="#7cc6e8" stroke={INK} strokeWidth="2" />
+        <path d="M 4 74 Q 12 64 22 72 Q 32 64 42 72 Q 52 64 62 72 Q 72 64 82 72 Q 92 64 96 72 L 96 82 Q 96 95 84 95 L 16 95 Q 4 95 4 82 Z" fill="#5fa8d3" stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+        <path d="M 4 82 Q 14 74 24 81 Q 34 74 44 81 Q 54 74 64 81 Q 74 74 84 81 Q 92 76 96 81 L 96 84 Q 96 95 84 95 L 16 95 Q 4 95 4 84 Z" fill="#7cc6e8" stroke={INK} strokeWidth="2" />
         <ellipse className={styles.ripple} cx="34" cy="78" rx="9" ry="2.6" fill="none" stroke="#eaf6fb" strokeWidth="2" />
         <ellipse className={`${styles.ripple} ${styles.rippleLate}`} cx="64" cy="80" rx="8" ry="2.4" fill="none" stroke="#eaf6fb" strokeWidth="2" />
         <g fill="#eaf6fb">
