@@ -41,8 +41,11 @@
 }
 
 .activityIcon {
-  font-size: 3.5rem;
-  line-height: 1;
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* --- HoldButton --- */
