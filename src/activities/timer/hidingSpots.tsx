@@ -308,8 +308,8 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
     back: (
       <svg {...svgProps}>
         <Sky fill="#e7eef7" />
-        <Cloud x={26} y={22} />
-        <Cloud x={74} y={32} s={0.75} />
+        <Cloud x={20} y={15} />
+        <Cloud x={81} y={22} s={0.7} />
       </svg>
     ),
     reveal: 'above',
@@ -439,8 +439,8 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
     back: (
       <svg {...svgProps}>
         <Sky fill="#e9f4fd" />
-        <Sun x={22} y={22} r={8} />
-        <Cloud x={72} y={26} />
+        <Sun x={20} y={20} r={8} />
+        <Cloud x={79} y={15} s={0.85} />
       </svg>
     ),
     reveal: 'above',
@@ -468,11 +468,11 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
     back: (
       <svg {...svgProps}>
         <rect x="2" y="2" width="96" height="96" rx="26" fill="#dff1fb" />
-        <circle cx="80" cy="30" r="9" fill="#ffd166" stroke={INK} strokeWidth="1.8" />
+        <circle cx="84" cy="17" r="7" fill="#ffd166" stroke={INK} strokeWidth="1.8" />
         <g stroke="#ffd166" strokeWidth="2.4" strokeLinecap="round" opacity="0.8">
-          <line x1="80" y1="16" x2="80" y2="20" />
-          <line x1="69" y1="22" x2="72" y2="25" />
-          <line x1="91" y1="22" x2="88" y2="25" />
+          <line x1="84" y1="5" x2="84" y2="8" />
+          <line x1="74" y1="10" x2="76.5" y2="12.5" />
+          <line x1="94" y1="10" x2="91.5" y2="12.5" />
         </g>
         <g className={styles.cloudDrift} fill="#fff" stroke={INK} strokeWidth="1.6" opacity="0.9">
           <ellipse cx="22" cy="30" rx="9" ry="4.5" />
@@ -508,7 +508,7 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
         <path d="M 8 11.5 L 88 11.5" stroke={INK} strokeWidth="1.4" />
       </svg>
     ),
-    reveal: 'inside',
+    reveal: 'above',
     front: (
       <svg {...svgProps}>
         <ellipse cx="50" cy="93" rx="34" ry="5" fill="rgba(61,44,41,0.1)" />
