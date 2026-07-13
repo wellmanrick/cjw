@@ -102,7 +102,7 @@ function maryHadALittleLamb(): Song {
   s.melody(16, [[E4, 1], [D4, 1], [C4, 1], [D4, 1], [E4, 1], [E4, 1], [E4, 1], [E4, 1]]);
   s.melody(24, [[D4, 1], [D4, 1], [E4, 1], [D4, 1], [C4, 4]]);
   s.bass(0, [[C3, 4], [C3, 4], [G3, 4], [C3, 4], [C3, 4], [C3, 4], [G3, 2], [C3, 4]]);
-  return s.build('mary', 'Mary Had a Little Lamb', 0.42, 31);
+  return s.build('mary', 'Mary Had a Little Lamb', 0.42, 35);
 }
 
 function rowYourBoat(): Song {
@@ -115,7 +115,7 @@ function rowYourBoat(): Song {
   // "life is but a dream"
   s.melody(18, [[G4, 1], [F4, 0.5], [E4, 1], [D4, 0.5], [C4, 3]]);
   s.bass(0, [[C3, 3], [C3, 3], [C3, 3], [C3, 3], [C3, 3], [C3, 3], [G3, 1.5], [C3, 3]]);
-  return s.build('row', 'Row Row Row Your Boat', 0.46, 24);
+  return s.build('row', 'Row Row Row Your Boat', 0.46, 27);
 }
 
 function oldMacdonald(): Song {
@@ -146,7 +146,7 @@ function bingo(): Song {
   // "and Bingo was his name-o!"
   s.melody(35, [[G4, 1], [C5, 1], [C5, 1], [D5, 1], [D5, 1], [E5, 1], [C5, 3]]);
   s.bass(35, [[G3, 2], [G3, 2], [C3, 3]]);
-  return s.build('bingo', 'BINGO', 0.4, 44);
+  return s.build('bingo', 'BINGO', 0.4, 47);
 }
 
 function ifYoureHappy(): Song {
@@ -193,7 +193,7 @@ function frereJacques(): Song {
   // "Ding dang dong, ding dang dong"
   s.melody(24, [[C4, 1], [G3, 1], [C4, 2], [C4, 1], [G3, 1], [C4, 2]]);
   s.bass(0, [[C3, 4], [C3, 4], [C3, 2], [G3, 2], [C3, 2], [G3, 2], [C3, 4], [C3, 4], [G3, 2], [C3, 2], [G3, 2], [C3, 2]]);
-  return s.build('frere', 'Frère Jacques', 0.44, 31);
+  return s.build('frere', 'Frère Jacques', 0.44, 35);
 }
 
 function londonBridge(): Song {
@@ -207,7 +207,7 @@ function londonBridge(): Song {
   // "my fair lady"
   s.melody(24, [[D4, 2], [G4, 2], [E4, 1], [C4, 3]]);
   s.bass(0, [[C3, 4], [G3, 4], [G3, 4], [C3, 4], [C3, 4], [G3, 4], [G3, 2], [C3, 4]]);
-  return s.build('london', 'London Bridge', 0.42, 31);
+  return s.build('london', 'London Bridge', 0.42, 35);
 }
 
 function happyBirthday(): Song {
@@ -254,7 +254,7 @@ function ringAroundTheRosie(): Song {
   // "We all fall DOWN!"
   s.melody(16.5, [[G4, 1], [G4, 1], [E4, 1], [C4, 3]]);
   s.bass(0, [[C3, 3], [G3, 3], [C3, 3], [G3, 3], [C3, 2], [G3, 2], [G3, 1.5], [C3, 3]]);
-  return s.build('rosie', 'Ring Around the Rosie', 0.42, 23);
+  return s.build('rosie', 'Ring Around the Rosie', 0.42, 25);
 }
 
 function pottyTime(): Song {
