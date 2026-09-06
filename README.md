@@ -48,6 +48,18 @@ A potty-training cheer button:
   synthesized cheer + toilet-flush sound play
 - Mute toggle and screen-wake-lock, same as the timer
 
+### 📱 Play Phone
+
+A toy phone for pretend calls:
+
+- A big colorful dial pad — every key plays a pretty music-box bell note
+  (pentatonic, so any mashing sounds musical)
+- A row of friends to call (all the timer characters, plus a "?" surprise):
+  tap one → ring ring… → they pick up with a big "Hi!" and sing their song
+  until you hang up
+- Green button dials a random friend; red button hangs up; mute toggle
+  and screen-wake-lock as in the other activities
+
 ## Development
 
 ```sh

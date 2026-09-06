@@ -306,6 +306,38 @@ export function playSongEvent(target: BaseAudioContext, event: SongEvent, beatS:
   }
 }
 
+/* --- Play-phone sounds: keypad bells, ringing, and a hello --- */
+
+/** One music-box bell note in the song voice (keypad taps, rings). */
+export function playBell(freq: number, gain = 0.14, beats = 1) {
+  if (muted) return;
+  unlockAudio();
+  if (!ctx) return;
+  playSongEvent(ctx, { at: 0, freq, beats, gain, voice: 'melody' }, 0.4, ctx.currentTime);
+}
+
+/** A cheerful "ring ring": eight quick alternating bells (~1.1s). */
+export function playRingBurst() {
+  if (muted) return;
+  unlockAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  for (let i = 0; i < 8; i++) {
+    const freq = i % 2 === 0 ? 659.25 : 523.25; // E5 / C5
+    playSongEvent(ctx, { at: 0, freq, beats: 0.35, gain: 0.13, voice: 'melody' }, 0.4, now + i * 0.14);
+  }
+}
+
+/** A rising two-note "hel-lo!" when a friend picks up. */
+export function playHello() {
+  if (muted) return;
+  unlockAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  playSongEvent(ctx, { at: 0, freq: 523.25, beats: 0.6, gain: 0.16, voice: 'melody' }, 0.4, now);
+  playSongEvent(ctx, { at: 0, freq: 783.99, beats: 1.2, gain: 0.16, voice: 'melody' }, 0.4, now + 0.22);
+}
+
 /* Lookahead scheduler on the audio clock, so the rhythm never drifts. */
 const SONG_LOOKAHEAD_S = 0.3;
 const SONG_TICK_MS = 120;
