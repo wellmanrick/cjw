@@ -7,9 +7,9 @@ export interface Settings {
 
 const STORAGE_KEY = 'cjw.settings.v1';
 
-const DEFAULTS: Settings = {
+export const DEFAULTS: Settings = {
   muted: false,
-  characterId: 'builtin:bunny',
+  characterId: 'builtin:trash',
   lastDurationMs: 5 * 60 * 1000,
 };
 

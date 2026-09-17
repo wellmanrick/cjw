@@ -1,12 +1,13 @@
-import { useEffect } from 'react';
-import { HoldButton } from '../../components/HoldButton';
-import { songForCharacter } from '../../lib/songs';
-import { startSong, stopSong } from '../../lib/sound';
-import { useWakeLock } from '../../lib/useWakeLock';
-import { CountdownRing } from './CountdownRing';
-import { HidingScene } from './HidingScene';
-import type { Mood } from './characters';
-import styles from './timer.module.css';
+import { useEffect } from "react";
+import { HoldButton } from "@/components/HoldButton";
+import { MuteButton } from "@/components/MuteButton";
+import { songForCharacter } from "@/lib/songs";
+import { startSong, stopSong } from "@/lib/sound";
+import { useWakeLock } from "@/lib/useWakeLock";
+import { CountdownRing } from "./CountdownRing";
+import { HidingScene } from "./HidingScene";
+import type { Mood } from "./characters";
+import styles from "./timer.module.css";
 
 interface Props {
   characterId: string;
@@ -18,14 +19,14 @@ interface Props {
 }
 
 function moodFor(progress: number): Mood {
-  return progress > 0.5 ? 'happy' : 'excited';
+  return progress > 0.5 ? "happy" : "excited";
 }
 
 function formatRemaining(ms: number): string {
   const totalSeconds = Math.ceil(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return `${minutes}:${String(seconds).padStart(2, '0')}`;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
 export function TimerRunning({
@@ -39,7 +40,6 @@ export function TimerRunning({
   useWakeLock(true);
   const lastTen = remainingMs <= 10_000;
 
-  // Every character sings its own tune while it hides.
   useEffect(() => {
     startSong(songForCharacter(characterId));
     return stopSong;
@@ -47,14 +47,7 @@ export function TimerRunning({
 
   return (
     <div className={`screen ${styles.runningScreen}`}>
-      <button
-        type="button"
-        className={styles.runningMute}
-        onClick={onToggleMute}
-        aria-label={muted ? 'Unmute' : 'Mute'}
-      >
-        {muted ? '🔇' : '🔊'}
-      </button>
+      <MuteButton muted={muted} onToggle={onToggleMute} className={styles.runningMute} />
       <CountdownRing progress={progress} pulsing={lastTen}>
         <HidingScene
           characterId={characterId}
@@ -63,7 +56,7 @@ export function TimerRunning({
           excited={lastTen}
         />
       </CountdownRing>
-      <div className={styles.remainingLabel}>{formatRemaining(remainingMs)}</div>
+      <div className={`${styles.remainingLabel} tabular-nums`}>{formatRemaining(remainingMs)}</div>
       <HoldButton onHoldComplete={onCancel} className={styles.stopButton}>
         Hold to stop
       </HoldButton>

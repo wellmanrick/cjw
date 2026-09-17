@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import { loadSettings, saveSettings } from '../../lib/settings';
-import { playCelebration, setMuted as setSoundMuted, unlockAudio } from '../../lib/sound';
-import { Celebration } from './Celebration';
-import { TimerRunning } from './TimerRunning';
-import { TimerSetup } from './TimerSetup';
-import { builtinCharacters } from './characters';
-import { useCountdown } from './useCountdown';
+import { useEffect, useRef, useState } from "react";
+import { playCelebration, setMuted as setSoundMuted, unlockAudio } from "@/lib/sound";
+import { useSettings } from "@/lib/useSettings";
+import { Celebration } from "./Celebration";
+import { TimerRunning } from "./TimerRunning";
+import { TimerSetup } from "./TimerSetup";
+import { builtinCharacters } from "./characters";
+import { useCountdown } from "./useCountdown";
 
 function resolveCharacter(characterId: string): string {
-  if (characterId !== 'surprise') return characterId;
+  if (characterId !== "surprise") return characterId;
   return builtinCharacters[Math.floor(Math.random() * builtinCharacters.length)].id;
 }
 
@@ -17,54 +17,52 @@ interface Props {
 }
 
 export function TimerActivity({ onExit }: Props) {
-  const [settings, setSettings] = useState(loadSettings);
-  // The character actually hiding this round — resolved from 'surprise' at start.
+  const { settings, update } = useSettings();
   const [activeCharacterId, setActiveCharacterId] = useState<string | null>(null);
   const timer = useCountdown();
   const celebratedRef = useRef(false);
 
-  // activeCharacterId is set in handleStart; the fallback only guards first render.
   const roundCharacterId =
-    activeCharacterId ?? (settings.characterId === 'surprise' ? builtinCharacters[0].id : settings.characterId);
+    activeCharacterId ??
+    (settings.characterId === "surprise" ? builtinCharacters[0].id : settings.characterId);
 
   useEffect(() => {
     setSoundMuted(settings.muted);
   }, [settings.muted]);
 
   useEffect(() => {
-    if (timer.status === 'done' && !celebratedRef.current) {
+    if (timer.status === "done" && !celebratedRef.current) {
       celebratedRef.current = true;
       playCelebration();
     }
-    if (timer.status !== 'done') celebratedRef.current = false;
+    if (timer.status !== "done") celebratedRef.current = false;
   }, [timer.status]);
 
   const handleStart = (durationMs: number) => {
     unlockAudio();
     setActiveCharacterId(resolveCharacter(settings.characterId));
-    setSettings(saveSettings({ lastDurationMs: durationMs }));
+    update({ lastDurationMs: durationMs });
     timer.start(durationMs);
   };
 
-  if (timer.status === 'running' || timer.status === 'paused') {
+  if (timer.status === "running" || timer.status === "paused") {
     return (
       <TimerRunning
         characterId={roundCharacterId}
         progress={timer.progress}
         remainingMs={timer.remainingMs}
         muted={settings.muted}
-        onToggleMute={() => setSettings((s) => saveSettings({ muted: !s.muted }))}
+        onToggleMute={() => update({ muted: !settings.muted })}
         onCancel={timer.cancel}
       />
     );
   }
 
-  if (timer.status === 'done') {
+  if (timer.status === "done") {
     return (
       <Celebration
         characterId={roundCharacterId}
         onAgain={() => {
-          // A fresh surprise each round if "surprise" is selected.
           setActiveCharacterId(resolveCharacter(settings.characterId));
           timer.start(timer.totalMs);
         }}
@@ -78,8 +76,8 @@ export function TimerActivity({ onExit }: Props) {
       characterId={settings.characterId}
       initialDurationMs={settings.lastDurationMs}
       muted={settings.muted}
-      onSelectCharacter={(id) => setSettings(saveSettings({ characterId: id }))}
-      onToggleMute={() => setSettings((s) => saveSettings({ muted: !s.muted }))}
+      onSelectCharacter={(id) => update({ characterId: id })}
+      onToggleMute={() => update({ muted: !settings.muted })}
       onStart={handleStart}
       onBack={onExit}
     />

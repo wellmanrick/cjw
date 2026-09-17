@@ -1,8 +1,15 @@
-import { useState } from 'react';
-import { CharacterPicker } from './CharacterPicker';
-import styles from './timer.module.css';
+import { useState } from "react";
+import { ActivityHeader } from "@/components/ActivityHeader";
+import { CharacterPicker } from "./CharacterPicker";
+import styles from "./timer.module.css";
 
-const PRESETS_MINUTES = [1, 2, 5, 10, 15];
+const PRESETS: Array<{ label: string; unit: string; minutes: number; seconds: number }> = [
+  { label: "30", unit: "sec", minutes: 0, seconds: 30 },
+  { label: "1", unit: "min", minutes: 1, seconds: 0 },
+  { label: "2", unit: "min", minutes: 2, seconds: 0 },
+  { label: "5", unit: "min", minutes: 5, seconds: 0 },
+  { label: "10", unit: "min", minutes: 10, seconds: 0 },
+];
 
 interface Props {
   characterId: string;
@@ -29,62 +36,46 @@ export function TimerSetup({
 
   const durationMs = (minutes * 60 + seconds) * 1000;
 
-  const step = (
-    value: number,
-    delta: number,
-    max: number,
-    set: (v: number) => void,
-  ) => set(Math.min(max, Math.max(0, value + delta)));
+  const isPreset = (p: (typeof PRESETS)[number]) =>
+    !showCustom && minutes === p.minutes && seconds === p.seconds;
+
+  const step = (value: number, delta: number, max: number, set: (v: number) => void) =>
+    set(Math.min(max, Math.max(0, value + delta)));
 
   return (
     <div className={`screen ${styles.setupScreen}`}>
-      <header className={styles.setupHeader}>
-        <button type="button" className={styles.iconButton} onClick={onBack} aria-label="Back">
-          ←
-        </button>
-        <h1 className={styles.setupTitle}>Timer</h1>
-        <button
-          type="button"
-          className={styles.iconButton}
-          onClick={onToggleMute}
-          aria-label={muted ? 'Unmute' : 'Mute'}
-        >
-          {muted ? '🔇' : '🔊'}
-        </button>
-      </header>
+      <ActivityHeader title="Timer" muted={muted} onToggleMute={onToggleMute} onBack={onBack} />
 
       <section>
-        <h2 className={styles.sectionLabel}>Who's counting down?</h2>
+        <h2 className={styles.sectionLabel}>Who hides?</h2>
         <CharacterPicker selectedId={characterId} onSelect={onSelectCharacter} />
       </section>
 
       <section>
         <h2 className={styles.sectionLabel}>How long?</h2>
         <div className={styles.presetRow}>
-          {PRESETS_MINUTES.map((m) => (
+          {PRESETS.map((p) => (
             <button
-              key={m}
+              key={`${p.label}${p.unit}`}
               type="button"
-              className={`${styles.presetButton} ${
-                !showCustom && minutes === m && seconds === 0 ? styles.presetSelected : ''
-              }`}
+              className={`${styles.presetButton} ${isPreset(p) ? styles.presetSelected : ""}`}
               onClick={() => {
-                setMinutes(m);
-                setSeconds(0);
+                setMinutes(p.minutes);
+                setSeconds(p.seconds);
                 setShowCustom(false);
               }}
             >
-              {m}
-              <small>min</small>
+              {p.label}
+              <small>{p.unit}</small>
             </button>
           ))}
           <button
             type="button"
-            className={`${styles.presetButton} ${showCustom ? styles.presetSelected : ''}`}
+            className={`${styles.presetButton} ${showCustom ? styles.presetSelected : ""}`}
             onClick={() => setShowCustom((v) => !v)}
           >
-            ✏️
-            <small>custom</small>
+            +
+            <small>more</small>
           </button>
         </div>
 
@@ -124,7 +115,7 @@ export function TimerSetup({
         disabled={durationMs === 0}
         onClick={() => onStart(durationMs)}
       >
-        ▶ Start
+        Start
       </button>
     </div>
   );

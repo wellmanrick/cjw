@@ -346,6 +346,36 @@
   }
 }
 
+/* Airplane propeller. */
+.propellerSpin {
+  animation: propellerSpin 0.18s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes propellerSpin {
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+/* Dozer blade shoves. */
+.bladePush {
+  animation: bladePush 1.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 90% 70%;
+}
+
+@keyframes bladePush {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-6px);
+  }
+}
+
 /* Clouds drift gently side to side. */
 .cloudDrift {
   animation: cloudDrift 8s ease-in-out infinite alternate;

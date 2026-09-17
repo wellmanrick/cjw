@@ -26,10 +26,10 @@ export interface Song {
 /* Note frequencies (equal temperament, A4 = 440). */
 const C3 = 130.81, D3 = 146.83, F3 = 174.61, G3 = 196.0, A3 = 220.0, Bb3 = 233.08;
 const C4 = 261.63, D4 = 293.66, E4 = 329.63, F4 = 349.23, G4 = 392.0, A4 = 440.0, Bb4 = 466.16, B4 = 493.88;
-const C5 = 523.25, D5 = 587.33, E5 = 659.25, F5 = 698.46;
+const C5 = 523.25, D5 = 587.33, E5 = 659.25, F5 = 698.46, G5 = 783.99;
 
-const MELODY_GAIN = 0.11;
-const BASS_GAIN = 0.05;
+const MELODY_GAIN = 0.13;
+const BASS_GAIN = 0.045;
 
 type Note = [freq: number, beats: number, gain?: number];
 
@@ -138,12 +138,11 @@ function bingo(): Song {
   s.melody(0, [[G4, 1], [C5, 1], [C5, 1], [C5, 1], [G4, 1], [A4, 1], [A4, 1], [G4, 2]]);
   s.melody(9, [[G4, 1], [C5, 1], [C5, 1], [D5, 1], [D5, 1], [E5, 1], [C5, 2]]);
   s.bass(1, [[C3, 2], [F3, 2], [C3, 2], [G3, 2], [C3, 2], [G3, 2], [C3, 2]]);
-  // "B-I-N-G-O" x3, stepping down
-  s.melody(17, [[E5, 1], [E5, 1], [F5, 1], [F5, 1], [F5, 2]]);
-  s.melody(23, [[D5, 1], [D5, 1], [E5, 1], [E5, 1], [E5, 2]]);
-  s.melody(29, [[C5, 1], [C5, 1], [D5, 1], [D5, 1], [D5, 2]]);
-  s.bass(17, [[C3, 2], [F3, 4], [G3, 2], [C3, 4], [F3, 2], [G3, 4]]);
-  // "and Bingo was his name-o!"
+  // "B-I-N-G-O" — the "O" has to land up, not sit on the same note
+  s.melody(17, [[E5, 1], [E5, 1], [F5, 1], [F5, 1], [G5, 2]]);
+  s.melody(23, [[D5, 1], [D5, 1], [E5, 1], [E5, 1], [F5, 2]]);
+  s.melody(29, [[C5, 1], [C5, 1], [D5, 1], [D5, 1], [E5, 2]]);
+  s.bass(17, [[C3, 2], [F3, 2], [G3, 2], [C3, 2], [F3, 2], [G3, 2]]);
   s.melody(35, [[G4, 1], [C5, 1], [C5, 1], [D5, 1], [D5, 1], [E5, 1], [C5, 3]]);
   s.bass(35, [[G3, 2], [G3, 2], [C3, 3]]);
   return s.build('bingo', 'BINGO', 0.4, 47);
@@ -171,15 +170,15 @@ function ifYoureHappy(): Song {
 
 function popGoesTheWeasel(): Song {
   const s = new SongBuilder();
-  // "All around the cobbler's bench, the monkey chased the weasel"
-  s.melody(0, [[G3, 1], [C4, 1], [C4, 0.5], [D4, 1], [D4, 0.5], [E4, 0.5], [G4, 0.5], [E4, 0.5], [C4, 1.5]]);
-  s.melody(7, [[G3, 1], [C4, 1], [C4, 0.5], [D4, 1], [F4, 0.5], [E4, 0.5], [C4, 2]]);
-  s.bass(1, [[C3, 3], [G3, 3], [C3, 3], [G3, 1.5], [C3, 1.5]]);
-  // "The monkey thought 'twas all in fun" ... "POP! goes the weasel"
-  s.melody(13.5, [[G3, 1], [C4, 1], [C4, 0.5], [D4, 1], [D4, 0.5], [E4, 0.5], [G4, 0.5], [E4, 0.5], [C4, 1.5]]);
-  s.melody(20.5, [[A4, 1.5, 0.16], [D4, 1], [F4, 0.5], [E4, 0.5], [C4, 2]]); // the "Pop!"
-  s.bass(14.5, [[C3, 3], [G3, 3], [F3, 1.5], [G3, 1.5], [C3, 2]]);
-  return s.build('weasel', 'Pop Goes the Weasel', 0.4, 28);
+  // 6/8 feel, starting on a mid G so it doesn't rumble under the melody.
+  s.melody(0, [[G4, 0.5], [C4, 1], [C4, 0.5], [D4, 1], [D4, 0.5], [E4, 0.5], [G4, 0.5], [E4, 0.5], [C4, 1.5]]);
+  s.melody(7, [[G4, 0.5], [C4, 1], [C4, 0.5], [D4, 1], [F4, 0.5], [E4, 1], [C4, 2]]);
+  s.bass(0.5, [[C3, 3], [G3, 3], [C3, 3], [G3, 2], [C3, 2]]);
+  s.melody(14, [[G4, 0.5], [C4, 1], [C4, 0.5], [D4, 1], [D4, 0.5], [E4, 0.5], [G4, 0.5], [E4, 0.5], [C4, 1.5]]);
+  // The leap up is the "POP!"
+  s.melody(21, [[A4, 1.5, 0.18], [D4, 1], [F4, 0.5], [E4, 1], [C4, 2]]);
+  s.bass(14.5, [[C3, 3], [G3, 3], [F3, 2], [G3, 2], [C3, 3]]);
+  return s.build('weasel', 'Pop Goes the Weasel', 0.38, 30);
 }
 
 function frereJacques(): Song {
@@ -222,18 +221,17 @@ function happyBirthday(): Song {
 
 function babyShark(): Song {
   const s = new SongBuilder();
-  // "Baby shark, doo doo doo doo doo doo" x3, then "Baby shark!"
+  // "Ba-by shark, doo-doo doo-doo doo-doo" — short-short-long, then the doos.
   const verse = (at: number) => {
-    s.melody(at, [[C4, 0.75], [D4, 0.75], [E4, 0.5], [E4, 0.5], [E4, 0.5], [E4, 0.25], [E4, 0.25], [E4, 0.75]]);
-    s.bass(at, [[C3, 2], [G3, 2]]);
+    s.melody(at, [[C4, 0.5], [D4, 0.5], [E4, 1], [E4, 0.5], [E4, 0.5], [E4, 0.5], [E4, 0.5], [E4, 0.5], [E4, 0.5]]);
+    s.bass(at, [[C3, 2], [G3, 3]]);
   };
   verse(0);
-  verse(4.5);
-  verse(9);
-  // "Baby shark!" + a little chomp
-  s.melody(13.5, [[C4, 0.75], [D4, 0.75], [E4, 1.5], [0, 0.5], [E5, 0.4, 0.16]]);
-  s.bass(13.5, [[C3, 1.5], [G3, 1], [C3, 1.5]]);
-  return s.build('shark', 'Baby Shark', 0.32, 19);
+  verse(5);
+  verse(10);
+  s.melody(15, [[C4, 0.5], [D4, 0.5], [E4, 2], [0, 0.5], [G5, 0.35, 0.14]]);
+  s.bass(15, [[C3, 2], [G3, 2]]);
+  return s.build('shark', 'Baby Shark', 0.3, 20);
 }
 
 function odeToJoy(): Song {
@@ -269,6 +267,32 @@ function pottyTime(): Song {
   return s.build('potty', 'Potty Time', 0.4, 33);
 }
 
+/** The bear went over the mountain / For he's a jolly good fellow. */
+function overTheMountain(): Song {
+  const s = new SongBuilder();
+  const phrase = (at: number) => {
+    s.melody(at, [
+      [C4, 1], [C4, 1], [E4, 1], [E4, 1], [G4, 1], [G4, 1],
+      [A4, 1], [G4, 1], [F4, 1], [E4, 1], [D4, 1], [C4, 2],
+    ]);
+    s.bass(at, [[C3, 4], [C3, 4], [G3, 4], [C3, 3]]);
+  };
+  phrase(0);
+  phrase(16);
+  return s.build("plane", "The Bear Went Over the Mountain", 0.38, 34);
+}
+
+/** I've been working on the railroad — the construction-vehicle work song. */
+function railroad(): Song {
+  const s = new SongBuilder();
+  s.melody(0, [[C4, 1], [C4, 1], [C4, 1], [C4, 1], [A4, 1], [C4, 1], [F4, 2]]);
+  s.melody(8, [[F4, 1], [E4, 1], [F4, 1], [G4, 1], [A4, 2], [G4, 2]]);
+  s.melody(16, [[C4, 1], [C4, 1], [C4, 1], [C4, 1], [A4, 1], [C4, 1], [F4, 2]]);
+  s.melody(24, [[A4, 1], [G4, 1], [F4, 1], [C4, 1], [D4, 1], [E4, 1], [F4, 2]]);
+  s.bass(0, [[C3, 4], [F3, 4], [F3, 4], [C3, 4], [C3, 4], [F3, 4], [C3, 2], [G3, 2], [F3, 4]]);
+  return s.build('railroad', 'I\'ve Been Working on the Railroad', 0.36, 34);
+}
+
 const SONGS: Record<string, Song> = {};
 for (const song of [
   wheelsOnTheBus(),
@@ -286,6 +310,8 @@ for (const song of [
   odeToJoy(),
   ringAroundTheRosie(),
   pottyTime(),
+  overTheMountain(),
+  railroad(),
 ]) {
   SONGS[song.id] = song;
 }
@@ -305,8 +331,12 @@ const CHARACTER_SONGS: Record<string, string> = {
   'builtin:fox': 'london',
   'builtin:duck': 'row',
   'builtin:shark': 'shark',
-  'builtin:digger': 'ode',
+  'builtin:digger': 'railroad',
   'builtin:monster': 'rosie',
+  'builtin:trash': 'wheels',
+  'builtin:dozer': 'railroad',
+  'builtin:dump': 'railroad',
+  'builtin:plane': 'plane',
 };
 
 /** Every character sings while it hides; uploaded photos get Happy Birthday. */

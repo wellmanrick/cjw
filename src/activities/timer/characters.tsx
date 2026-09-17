@@ -606,29 +606,178 @@ const dogCollar = (
   </g>
 );
 
+/** Rear-loader garbage truck — green hopper, spinning wheels, proud little face. */
+function TrashTruck({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <ellipse cx="50" cy="92" rx="38" ry="4" fill="rgba(61,44,41,0.12)" />
+      <rect x="38" y="28" width="54" height="46" rx="6" fill="#6fbf73" stroke={INK} strokeWidth="2.6" />
+      <rect x="38" y="28" width="54" height="10" rx="5" fill="#8ed18a" />
+      <path d="M 44 42 h 42 M 44 50 h 42 M 44 58 h 42" stroke={INK} strokeWidth="1.6" opacity="0.28" />
+      <rect x="84" y="36" width="8" height="22" rx="2" fill="#5aa35e" stroke={INK} strokeWidth="2" />
+      <rect x="6" y="40" width="34" height="34" rx="7" fill="#5aa35e" stroke={INK} strokeWidth="2.6" />
+      <rect x="10" y="44" width="24" height="16" rx="4" fill="#cdeefd" stroke={INK} strokeWidth="2" />
+      <path d="M 13 57 q 8 -10 18 -12" stroke="#fff" strokeWidth="2.2" fill="none" opacity="0.7" />
+      <g transform="translate(22 52) scale(0.42) translate(-50 -50)">
+        <Cheeks cx={50} cy={54} color="#f4845f" />
+        <Face mood={mood} cx={50} cy={50} />
+      </g>
+      <rect x="6" y="66" width="86" height="6" fill="#4f8f53" />
+      <circle cx="18" cy="64" r="3" fill="#ffd166" stroke={INK} strokeWidth="1.6" />
+      <g className={styles.wheelSpin}>
+        <circle cx="22" cy="80" r="10" fill="#57534e" stroke={INK} strokeWidth="2.6" />
+        <circle cx="22" cy="80" r="4.4" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+        <path d="M 22 70.5 L 22 75 M 22 85 L 22 89.5 M 12.5 80 L 17 80 M 27 80 L 31.5 80" stroke="#d6d3d1" strokeWidth="2.2" />
+      </g>
+      <g className={styles.wheelSpin}>
+        <circle cx="72" cy="80" r="10" fill="#57534e" stroke={INK} strokeWidth="2.6" />
+        <circle cx="72" cy="80" r="4.4" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+        <path d="M 72 70.5 L 72 75 M 72 85 L 72 89.5 M 62.5 80 L 67 80 M 77 80 L 81.5 80" stroke="#d6d3d1" strokeWidth="2.2" />
+      </g>
+    </svg>
+  );
+}
+
+/** Low yellow bulldozer with a shoving blade. */
+function Dozer({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <ellipse cx="50" cy="92" rx="38" ry="4" fill="rgba(61,44,41,0.12)" />
+      <g className={styles.bladePush}>
+        <rect x="4" y="48" width="10" height="30" rx="2" fill="#c9d6de" stroke={INK} strokeWidth="2.4" />
+        <path d="M 8 46 L 18 40 L 18 80 L 8 78 Z" fill="#9aa8b2" stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+      </g>
+      <rect x="18" y="42" width="62" height="30" rx="6" fill="#ffb703" stroke={INK} strokeWidth="2.6" />
+      <rect x="18" y="42" width="62" height="9" rx="5" fill="#ffd166" />
+      <rect x="28" y="46" width="28" height="16" rx="4" fill="#cdeefd" stroke={INK} strokeWidth="2" />
+      <g transform="translate(42 54) scale(0.4) translate(-50 -50)">
+        <Cheeks cx={50} cy={54} color="#f4845f" />
+        <Face mood={mood} cx={50} cy={50} />
+      </g>
+      <rect x="62" y="54" width="16" height="14" rx="3" fill="#e09f00" stroke={INK} strokeWidth="2" />
+      <rect x="16" y="72" width="70" height="16" rx="8" fill="#57534e" stroke={INK} strokeWidth="2.6" />
+      <g className={styles.wheelSpin}>
+        <circle cx="30" cy="80" r="4.6" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+        <path d="M 30 75.4 L 30 84.6 M 25.4 80 L 34.6 80" stroke={INK} strokeWidth="1.4" />
+      </g>
+      <circle cx="50" cy="80" r="4.6" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+      <g className={styles.wheelSpin}>
+        <circle cx="70" cy="80" r="4.6" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+        <path d="M 70 75.4 L 70 84.6 M 65.4 80 L 74.6 80" stroke={INK} strokeWidth="1.4" />
+      </g>
+    </svg>
+  );
+}
+
+/** Dump truck with a tipping orange bed. */
+function DumpTruck({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <ellipse cx="50" cy="92" rx="38" ry="4" fill="rgba(61,44,41,0.12)" />
+      <g className="dumpBed">
+        <path d="M 40 32 L 90 28 L 92 58 L 40 62 Z" fill="#fb9b51" stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
+        <path d="M 48 36 L 84 33 L 85 40 L 48 43 Z" fill="#ffc089" />
+      </g>
+      <rect x="6" y="40" width="36" height="32" rx="7" fill="#e85d4a" stroke={INK} strokeWidth="2.6" />
+      <rect x="10" y="44" width="24" height="16" rx="4" fill="#cdeefd" stroke={INK} strokeWidth="2" />
+      <path d="M 13 57 q 8 -10 18 -12" stroke="#fff" strokeWidth="2.2" fill="none" opacity="0.7" />
+      <g transform="translate(22 52) scale(0.42) translate(-50 -50)">
+        <Cheeks cx={50} cy={54} color="#f4845f" />
+        <Face mood={mood} cx={50} cy={50} />
+      </g>
+      <g className={styles.wheelSpin}>
+        <circle cx="22" cy="80" r="10" fill="#57534e" stroke={INK} strokeWidth="2.6" />
+        <circle cx="22" cy="80" r="4.4" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+        <path d="M 22 70.5 L 22 75 M 22 85 L 22 89.5 M 12.5 80 L 17 80 M 27 80 L 31.5 80" stroke="#d6d3d1" strokeWidth="2.2" />
+      </g>
+      <g className={styles.wheelSpin}>
+        <circle cx="70" cy="80" r="10" fill="#57534e" stroke={INK} strokeWidth="2.6" />
+        <circle cx="70" cy="80" r="4.4" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+        <path d="M 70 70.5 L 70 75 M 70 85 L 70 89.5 M 60.5 80 L 65 80 M 75 80 L 79.5 80" stroke="#d6d3d1" strokeWidth="2.2" />
+      </g>
+    </svg>
+  );
+}
+
+/** Chubby propeller plane with a spinning nose. */
+function Airplane({ mood }: { mood: Mood }) {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%">
+      <ellipse cx="50" cy="78" rx="28" ry="10" fill="#5fa8d3" stroke={INK} strokeWidth="2.4" />
+      <ellipse cx="50" cy="78" rx="18" ry="6" fill="#7cc6e8" />
+      <path d="M 18 52 Q 8 52 6 46 Q 18 44 28 48 Z" fill="#e85d4a" stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+      <ellipse cx="52" cy="52" rx="36" ry="16" fill="#fdf6f0" stroke={INK} strokeWidth="2.6" />
+      <ellipse cx="58" cy="54" rx="18" ry="8" fill="#fff" />
+      <path d="M 72 42 L 78 22 L 86 24 L 80 46 Z" fill="#e85d4a" stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+      <g className={styles.propellerSpin}>
+        <ellipse cx="16" cy="52" rx="3.2" ry="16" fill="#c9d6de" stroke={INK} strokeWidth="2" />
+        <circle cx="16" cy="52" r="3.4" fill="#ffd166" stroke={INK} strokeWidth="1.6" />
+      </g>
+      <Cheeks cx={48} cy={50} color="#f4845f" />
+      <g transform="translate(-2, 0) scale(0.78)">
+        <Face mood={mood} cx={50} cy={50} />
+      </g>
+      <circle cx="78" cy="50" r="3" fill="#4cc26b" stroke={INK} strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+export const VEHICLE_IDS = [
+  "builtin:trash",
+  "builtin:digger",
+  "builtin:dozer",
+  "builtin:dump",
+  "builtin:plane",
+  "builtin:bus",
+] as const;
+
 export const builtinCharacters: BuiltinCharacter[] = [
   {
-    id: 'builtin:bus',
-    name: 'School bus',
-    spot: 'garage',
-    render: (mood) => <Bus mood={mood} />,
+    id: "builtin:trash",
+    name: "Trash truck",
+    spot: "dumpster",
+    render: (mood) => <TrashTruck mood={mood} />,
   },
   {
-    id: 'builtin:monster',
-    name: 'Monster',
-    spot: 'toybox',
-    render: (mood) => <Monster mood={mood} />,
-  },
-  {
-    id: 'builtin:digger',
-    name: 'Digger',
-    spot: 'dirtpile',
+    id: "builtin:digger",
+    name: "Digger",
+    spot: "dirtpile",
     render: (mood) => <Digger mood={mood} />,
   },
   {
-    id: 'builtin:shark',
-    name: 'Baby shark',
-    spot: 'waves',
+    id: "builtin:dozer",
+    name: "Dozer",
+    spot: "dirtpile",
+    render: (mood) => <Dozer mood={mood} />,
+  },
+  {
+    id: "builtin:dump",
+    name: "Dump truck",
+    spot: "dirtpile",
+    render: (mood) => <DumpTruck mood={mood} />,
+  },
+  {
+    id: "builtin:plane",
+    name: "Airplane",
+    spot: "hangar",
+    render: (mood) => <Airplane mood={mood} />,
+  },
+  {
+    id: "builtin:bus",
+    name: "School bus",
+    spot: "garage",
+    render: (mood) => <Bus mood={mood} />,
+  },
+  {
+    id: "builtin:monster",
+    name: "Monster",
+    spot: "toybox",
+    render: (mood) => <Monster mood={mood} />,
+  },
+  {
+    id: "builtin:shark",
+    name: "Baby shark",
+    spot: "waves",
     render: (mood) => <BabyShark mood={mood} />,
   },
   {

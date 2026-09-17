@@ -18,7 +18,9 @@ export type SpotId =
   | 'toybox'
   | 'dirtpile'
   | 'waves'
-  | 'gift';
+  | 'gift'
+  | 'dumpster'
+  | 'hangar';
 
 export interface HidingSpot {
   /** Friendly name, e.g. for accessibility labels. */
@@ -522,6 +524,69 @@ export const hidingSpots: Record<SpotId, HidingSpot> = {
         <rect x="22" y="50" width="56" height="12" rx="4" fill="#5fbfcc" stroke={INK} strokeWidth="2.4" />
         <rect x="45" y="50" width="10" height="12" fill="#f0708d" stroke={INK} strokeWidth="1.8" />
         <path d="M 50 50 q -10 -12 -2 -14 q 6 0 2 14 q 10 -12 2 -14" stroke="#f0708d" strokeWidth="4" fill="none" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  dumpster: {
+    name: "Dumpster",
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#e7f0e4" />
+        <Sun x={78} y={20} r={7} />
+        <Cloud x={22} y={18} s={0.8} />
+      </svg>
+    ),
+    reveal: "above",
+    lidStyle: "slide",
+    front: (
+      <svg {...svgProps}>
+        <ellipse cx="50" cy="93" rx="40" ry="4" fill="rgba(61,44,41,0.1)" />
+        <rect x="16" y="58" width="68" height="34" rx="4" fill="#6fbf73" stroke={INK} strokeWidth="2.6" />
+        <rect x="16" y="58" width="68" height="8" fill="#5aa35e" />
+        <path d="M 24 70 h 52 M 24 78 h 52 M 24 86 h 52" stroke={INK} strokeWidth="1.8" opacity="0.25" />
+        <rect x="22" y="64" width="12" height="6" rx="1.5" fill="#fff3bf" stroke={INK} strokeWidth="1.6" />
+        <rect x="66" y="72" width="10" height="8" rx="1.5" fill="#8bd3dd" stroke={INK} strokeWidth="1.6" />
+      </svg>
+    ),
+    lid: (
+      <svg {...svgProps}>
+        <rect x="14" y="48" width="72" height="12" rx="3" fill="#4f8f53" stroke={INK} strokeWidth="2.4" />
+        <rect x="44" y="46" width="12" height="8" rx="2" fill="#d6d3d1" stroke={INK} strokeWidth="1.8" />
+      </svg>
+    ),
+  },
+  hangar: {
+    name: "Hangar",
+    back: (
+      <svg {...svgProps}>
+        <Sky fill="#dff1fb" />
+        <Sun x={20} y={20} r={8} />
+        <Cloud x={78} y={16} />
+        <g stroke="#ffd166" strokeWidth="2" strokeLinecap="round" opacity="0.7">
+          <line x1="84" y1="8" x2="84" y2="11" />
+        </g>
+      </svg>
+    ),
+    reveal: "above",
+    lidStyle: "slide",
+    front: (
+      <svg {...svgProps}>
+        <ellipse cx="50" cy="93" rx="42" ry="4" fill="rgba(61,44,41,0.1)" />
+        <path d="M 10 88 L 10 58 L 50 36 L 90 58 L 90 88 Z" fill="#8ecae6" stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
+        <rect x="28" y="62" width="44" height="26" rx="2" fill="#33304a" stroke={INK} strokeWidth="2.2" />
+        <g stroke="#fff" strokeWidth="2" strokeDasharray="6 5" opacity="0.75">
+          <line x1="4" y1="90" x2="96" y2="90" />
+        </g>
+        <path d="M 78 52 L 80 38 L 84 39 L 82 52 Z" fill="#e85d4a" stroke={INK} strokeWidth="1.6" />
+      </svg>
+    ),
+    lid: (
+      <svg {...svgProps}>
+        <rect x="28" y="62" width="44" height="26" rx="2" fill="#4a6fa5" stroke={INK} strokeWidth="2.2" />
+        <g stroke="#6f8fbf" strokeWidth="2.2">
+          <line x1="29" y1="70" x2="71" y2="70" />
+          <line x1="29" y1="78" x2="71" y2="78" />
+        </g>
       </svg>
     ),
   },

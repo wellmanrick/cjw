@@ -1,0 +1,180 @@
+.screen {
+  align-items: center;
+  gap: 10px;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hint {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text-soft);
+  text-align: center;
+}
+
+.yard {
+  position: relative;
+  flex: 1;
+  min-height: 240px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 4px solid #5b4238;
+  background: #cfeaf4;
+  box-shadow: 0 5px 0 rgba(91, 66, 56, 0.14);
+}
+
+.sky {
+  position: absolute;
+  inset: 0 0 38% 0;
+  background: #d8eef8;
+}
+
+.ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  background: #cbb089;
+  border-top: 3px solid #5b4238;
+}
+
+.trash .ground,
+.bus .ground {
+  background: #9aa8b2;
+}
+
+.plane .ground {
+  background: #7fad6e;
+}
+
+.dumpster {
+  position: absolute;
+  right: 10%;
+  bottom: 28%;
+  width: 22%;
+  height: 22%;
+  background: #6fbf73;
+  border: 3px solid #5b4238;
+  border-radius: 8px 8px 4px 4px;
+}
+
+.dirt {
+  position: absolute;
+  right: 12%;
+  bottom: 30%;
+  width: 24%;
+  height: 16%;
+  background: #a47148;
+  border: 3px solid #5b4238;
+  border-radius: 50% 50% 40% 40%;
+  transition: transform 2.4s ease-in-out;
+}
+
+.dirtMove {
+  transform: translateX(18%);
+}
+
+.actor {
+  position: absolute;
+  left: 18%;
+  bottom: 8%;
+  width: 46%;
+  max-width: 220px;
+  z-index: 2;
+}
+
+.act_trash {
+  animation: reverseTruck 3s ease-in-out;
+}
+
+.act_digger {
+  animation: scoop 2.8s ease-in-out;
+}
+
+.act_dozer {
+  animation: push 2.8s ease-in-out;
+}
+
+.act_dump {
+  animation: settle 2.8s ease-in-out;
+}
+
+.act_dump :global(.dumpBed) {
+  transform-box: fill-box;
+  transform-origin: 20% 80%;
+  animation: tipBed 2.8s ease-in-out;
+}
+
+.act_plane {
+  animation: fly 3.2s ease-in-out;
+}
+
+.act_bus {
+  animation: roll 3s ease-in-out;
+}
+
+@keyframes reverseTruck {
+  0% { transform: translateX(0); }
+  30% { transform: translateX(10%); }
+  100% { transform: translateX(42%); }
+}
+
+@keyframes scoop {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(6%); }
+  70% { transform: translateY(-4%); }
+}
+
+@keyframes push {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(28%); }
+}
+
+@keyframes settle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4%); }
+}
+
+@keyframes tipBed {
+  0%, 15% { transform: rotate(0deg); }
+  45%, 70% { transform: rotate(-26deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes fly {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(55%, -70%) scale(0.7); }
+}
+
+@keyframes roll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(48%); }
+}
+
+.picker {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.pick {
+  flex: 1;
+  min-width: 0;
+  max-width: 72px;
+  aspect-ratio: 1;
+  padding: 4px;
+  border-radius: 18px;
+  border: 3px solid #5b4238;
+  background: #fffdf8;
+  box-shadow: 0 3px 0 rgba(91, 66, 56, 0.14);
+}
+
+.pickOn {
+  background: #fff3c4;
+  transform: translateY(-2px);
+}
