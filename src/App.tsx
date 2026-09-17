@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { activities } from './activities/registry';
 import { HomeScreen } from './components/HomeScreen';
+import { stopSong } from './lib/sound';
 
 function activityFromHash(): string | null {
   const id = window.location.hash.replace(/^#\/?/, '');
@@ -16,6 +17,8 @@ export default function App() {
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
+
+  useEffect(() => () => stopSong(), [activeId]);
 
   const open = (id: string) => {
     window.location.hash = `/${id}`;

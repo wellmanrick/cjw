@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #fef6e4;
+  --color-paper: #fffdf8;
+  --color-ink: #3d2c29;
+  --color-muted: #8a7a72;
+  --color-coral: #e85d4a;
+  --color-blush: #f582ae;
+  --color-blush-dark: #d9608c;
+  --color-teal: #8bd3dd;
+  --color-go: #4cc26b;
+  --color-stop: #e85d4a;
+  --color-sun: #ffd166;
+  --color-shadow: rgb(61 44 41 / 0.15);
+  --font-sans: "Fredoka", "Nunito", ui-rounded, system-ui, sans-serif;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+}
+
+/* Aliases for the original CSS modules */
+:root {
+  --color-bg: #fef6e4;
+  --color-surface: #ffffff;
+  --color-text: #3d2c29;
+  --color-text-soft: #8a7a72;
+  --color-primary: #f582ae;
+  --color-primary-dark: #d9608c;
+  --color-accent: #8bd3dd;
+  --color-go: #4cc26b;
+  --color-stop: #e85d4a;
+  --color-shadow: rgba(61, 44, 41, 0.15);
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --touch-target: 64px;
+  --font-display: "Fredoka", ui-rounded, system-ui, sans-serif;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    height: 100%;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-display);
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+  }
+
+  button {
+    font-family: inherit;
+    color: inherit;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img {
+    outline: 1px solid rgb(0 0 0 / 0.08);
+    outline-offset: -1px;
+  }
+}
+
+.screen {
+  height: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + var(--space-3))
+    calc(env(safe-area-inset-right) + var(--space-3))
+    calc(env(safe-area-inset-bottom) + var(--space-3))
+    calc(env(safe-area-inset-left) + var(--space-3));
+  overflow-y: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holdFill,
+  .holdButton {
+    transition-duration: 0.01ms !important;
+  }
+}

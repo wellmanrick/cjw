@@ -1,6 +1,6 @@
-import { Confetti } from '../../components/Confetti';
-import { HidingScene } from './HidingScene';
-import styles from './timer.module.css';
+import { Confetti } from "@/components/Confetti";
+import { HidingScene } from "./HidingScene";
+import styles from "./timer.module.css";
 
 interface Props {
   characterId: string;
@@ -8,7 +8,6 @@ interface Props {
   onDone: () => void;
 }
 
-/* Twinkling stars anchored around the character. */
 const SPARKLES = [
   { x: -8, y: 4, size: 26, delay: 0 },
   { x: 96, y: 12, size: 20, delay: 0.5 },
@@ -32,17 +31,22 @@ export function Celebration({ characterId, onAgain, onDone }: Props) {
             viewBox="0 0 24 24"
             aria-hidden
           >
-            <path d="M 12 1 L 14.5 9.5 L 23 12 L 14.5 14.5 L 12 23 L 9.5 14.5 L 1 12 L 9.5 9.5 Z" fill="#ffd166" stroke="#e09f00" strokeWidth="1" />
+            <path
+              d="M 12 1 L 14.5 9.5 L 23 12 L 14.5 14.5 L 12 23 L 9.5 14.5 L 1 12 L 9.5 9.5 Z"
+              fill="#ffd166"
+              stroke="#e09f00"
+              strokeWidth="1"
+            />
           </svg>
         ))}
         <HidingScene characterId={characterId} mood="party" revealed />
       </div>
       <div className={styles.celebrationButtons}>
         <button type="button" className={styles.againButton} onClick={onAgain}>
-          🔁 Again
+          Again
         </button>
         <button type="button" className={styles.doneButton} onClick={onDone}>
-          ✅ Done
+          Done
         </button>
       </div>
     </div>
