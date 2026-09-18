@@ -112,39 +112,87 @@
 
 .propDumpster {
   position: absolute;
-  right: 4%;
+  right: 6%;
   bottom: 16%;
-  width: 20%;
-  max-width: 108px;
+  width: 22%;
+  max-width: 120px;
   z-index: 2;
 }
 
 .propDirt {
   position: absolute;
-  right: 6%;
-  bottom: 24%;
-  width: 32%;
-  max-width: 160px;
+  right: 10%;
+  bottom: 22%;
+  width: 30%;
+  max-width: 150px;
   z-index: 2;
-  transition: transform 2.6s ease-in-out;
+  transform-origin: 50% 90%;
+  transition: transform 1.2s ease-in;
 }
 
-.dirtMove {
-  transform: translateX(22%);
+.dirtScooped {
+  transform: scale(0.45) translateY(18%);
+}
+
+.dumpedPile {
+  position: absolute;
+  right: 8%;
+  bottom: 14%;
+  width: 28%;
+  max-width: 140px;
+  z-index: 2;
+  animation: pileGrow 0.8s ease-out 1.4s both;
+}
+
+@keyframes pileGrow {
+  from { transform: scale(0.2) translateY(30%); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.fallingDirt {
+  position: absolute;
+  right: 22%;
+  bottom: 28%;
+  width: 14%;
+  max-width: 70px;
+  z-index: 4;
+  animation: dirtFall 1.2s ease-in 0.9s both;
+}
+
+@keyframes dirtFall {
+  0% { transform: translateY(-40%) scale(0.7); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(70%) scale(1); opacity: 0; }
 }
 
 .actor {
   position: absolute;
-  left: 8%;
-  bottom: 5%;
-  width: 44%;
-  max-width: 220px;
+  left: 6%;
+  bottom: 4%;
+  width: 46%;
+  max-width: 230px;
   z-index: 3;
   background: transparent;
   padding: 0;
 }
 
-.idle {
+.face,
+.faceFlip {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+.faceFlip {
+  transform: scaleX(-1);
+}
+
+.act_trash_idle,
+.act_digger_idle,
+.act_dozer_idle,
+.act_dump_idle,
+.act_plane_idle,
+.act_bus_idle {
   animation: idleBob 3.2s ease-in-out infinite;
 }
 
@@ -153,82 +201,80 @@
   50% { transform: translateY(-4px); }
 }
 
-.act_trash {
-  animation: reverseTruck 2.8s ease-in-out forwards;
+.bladeDirt {
+  position: absolute;
+  left: -12%;
+  bottom: 6%;
+  width: 62%;
+  pointer-events: none;
 }
 
-.act_digger {
-  animation: scoop 2.8s ease-in-out forwards;
-}
+.act_trash_work { animation: drive 2.6s ease-in-out forwards; }
+.act_trash_done { transform: translateX(42%); }
+.act_digger_work { animation: scoop 2.6s ease-in-out forwards; }
+.act_digger_done { transform: translate(10%, -4%); }
+.act_dozer_work { animation: push 2.6s ease-in-out forwards; }
+.act_dozer_done { transform: translateX(52%); }
+.act_dump_work { animation: dumpRoll 2.6s ease-in-out forwards; }
+.act_dump_done { transform: translateX(28%); }
+.act_plane_work { animation: fly 3s ease-in-out forwards; }
+.act_plane_done { transform: translate(46%, -28%) scale(0.78); }
+.act_bus_work { animation: drive 2.6s ease-in-out forwards; }
+.act_bus_done { transform: translateX(50%); }
 
-.act_dozer {
-  animation: push 2.8s ease-in-out forwards;
-}
-
-.act_dump {
-  animation: settle 2.8s ease-in-out forwards;
-}
-
-.act_dump :global(.dumpBed) {
+.act_dump_work :global(.dumpBed),
+.act_dump_done :global(.dumpBed) {
   transform-box: fill-box;
   transform-origin: 20% 80%;
-  animation: tipBed 2.8s ease-in-out forwards;
 }
 
-.act_plane {
-  animation: fly 3.2s ease-in-out forwards;
+.act_dump_work :global(.dumpBed) {
+  animation: tipBed 2.6s ease-in-out forwards;
 }
 
-.act_bus {
-  animation: roll 3s ease-in-out forwards;
-}
-
-@keyframes reverseTruck {
+@keyframes drive {
   0% { transform: translateX(0); }
-  28% { transform: translateX(8%); }
-  100% { transform: translateX(38%); }
+  100% { transform: translateX(50%); }
 }
 
 @keyframes scoop {
-  0%, 100% { transform: translate(0, 0); }
-  35% { transform: translate(8%, 8%); }
-  65% { transform: translate(8%, -6%); }
+  0% { transform: translate(0, 0); }
+  30% { transform: translate(12%, 6%); }
+  55% { transform: translate(12%, -10%); }
+  100% { transform: translate(10%, -4%); }
 }
 
 @keyframes push {
   0% { transform: translateX(0); }
-  100% { transform: translateX(30%); }
+  100% { transform: translateX(52%); }
 }
 
-@keyframes settle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(5%); }
+@keyframes dumpRoll {
+  0% { transform: translateX(0); }
+  40%, 100% { transform: translateX(28%); }
 }
 
 @keyframes tipBed {
-  0%, 12% { transform: rotate(0deg); }
-  40%, 72% { transform: rotate(-28deg); }
+  0%, 18% { transform: rotate(0deg); }
+  40%, 70% { transform: rotate(-32deg); }
   100% { transform: rotate(0deg); }
 }
 
 @keyframes fly {
   0% { transform: translate(0, 0) scale(1); }
-  55% { transform: translate(28%, -52%) scale(0.82); }
-  100% { transform: translate(42%, -22%) scale(0.78); }
-}
-
-@keyframes roll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(46%); }
+  55% { transform: translate(32%, -58%) scale(0.8); }
+  100% { transform: translate(46%, -28%) scale(0.78); }
 }
 
 .caption {
   margin: 0;
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--color-text);
   text-align: center;
-  line-height: 1.1;
+  line-height: 1.2;
+  min-height: 2.4em;
+  padding: 0 8px;
 }
 
 .picker {

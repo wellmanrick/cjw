@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityHeader } from "@/components/ActivityHeader";
 import { playVehicleSound, speak, setMuted as setSoundMuted, unlockAudio, type VehicleKind } from "@/lib/sound";
 import { useSettings } from "@/lib/useSettings";
@@ -59,12 +59,12 @@ function Sun() {
   );
 }
 
-function Dumpster() {
+function Dumpster({ empty }: { empty: boolean }) {
   return (
     <svg className={styles.propDumpster} viewBox="0 0 100 90" aria-hidden>
       <ellipse cx="50" cy="84" rx="32" ry="5" fill="rgba(61,44,41,0.14)" />
       <path d="M 14 28 L 20 74 Q 50 82 80 74 L 86 28 Z" fill="#4f8f53" stroke={INK} strokeWidth="2.8" strokeLinejoin="round" />
-      <path d="M 22 40 h 56 M 24 52 h 52" stroke={INK} strokeWidth="2" opacity="0.22" />
+      {!empty && <path d="M 28 48 Q 50 36 72 50 Q 50 62 28 48 Z" fill="#7a5a3a" stroke={INK} strokeWidth="1.8" />}
       <rect x="10" y="16" width="80" height="16" rx="5" fill="#6fbf73" stroke={INK} strokeWidth="2.6" />
       <rect x="18" y="20" width="18" height="8" rx="2" fill="#cdeefd" stroke={INK} strokeWidth="1.6" />
       <rect x="64" y="20" width="18" height="8" rx="2" fill="#cdeefd" stroke={INK} strokeWidth="1.6" />
@@ -72,9 +72,9 @@ function Dumpster() {
   );
 }
 
-function DirtPile({ moving }: { moving: boolean }) {
+function DirtPile({ className }: { className?: string }) {
   return (
-    <svg className={`${styles.propDirt} ${moving ? styles.dirtMove : ""}`} viewBox="0 0 120 70" aria-hidden>
+    <svg className={className} viewBox="0 0 120 70" aria-hidden>
       <ellipse cx="60" cy="62" rx="48" ry="7" fill="rgba(61,44,41,0.12)" />
       <path d="M 10 58 Q 22 18 48 22 Q 60 8 78 24 Q 102 16 110 58 Z" fill="#c4894a" stroke={INK} strokeWidth="2.8" strokeLinejoin="round" />
       <path d="M 28 50 Q 48 30 70 48" fill="#e0a36a" stroke="none" />
@@ -82,38 +82,47 @@ function DirtPile({ moving }: { moving: boolean }) {
   );
 }
 
-function Road() {
+function FallingDirt() {
   return (
-    <div className={styles.road} aria-hidden>
-      <span className={styles.lane} />
-    </div>
+    <svg className={styles.fallingDirt} viewBox="0 0 60 80" aria-hidden>
+      <ellipse cx="30" cy="18" rx="16" ry="10" fill="#c4894a" stroke={INK} strokeWidth="2" />
+      <ellipse cx="22" cy="36" rx="10" ry="8" fill="#e0a36a" stroke={INK} strokeWidth="1.6" />
+      <ellipse cx="38" cy="42" rx="8" ry="7" fill="#c4894a" stroke={INK} strokeWidth="1.6" />
+    </svg>
   );
 }
 
 export function TrucksActivity({ onExit }: Props) {
   const { settings, update } = useSettings();
   const [selected, setSelected] = useState("builtin:trash");
-  const [acting, setActing] = useState(false);
+  const [phase, setPhase] = useState<"idle" | "work" | "done">("idle");
   const [actKey, setActKey] = useState(0);
+  const jobTimer = useRef<number>(0);
   useWakeLock(true);
 
   useEffect(() => {
     setSoundMuted(settings.muted);
   }, [settings.muted]);
 
+  useEffect(() => () => window.clearTimeout(jobTimer.current), []);
+
   const go = (id: string) => {
     unlockAudio();
     const kind = KIND_BY_ID[id] ?? "bus";
     setSelected(id);
-    setActing(true);
+    setPhase("work");
     setActKey((k) => k + 1);
     playVehicleSound(kind);
-    window.setTimeout(() => speak(JOB_LINE[id] ?? getBuiltinCharacter(id).name), 480);
+    window.clearTimeout(jobTimer.current);
+    window.setTimeout(() => speak(JOB_LINE[id] ?? getBuiltinCharacter(id).name), 400);
+    jobTimer.current = window.setTimeout(() => setPhase("done"), 2700);
   };
 
   const vehicle = getBuiltinCharacter(selected);
   const kind = KIND_BY_ID[selected] ?? "bus";
-  const dirtJob = kind === "digger" || kind === "dozer" || kind === "dump";
+  const working = phase === "work";
+  const done = phase === "done";
+  const caption = working || done ? (JOB_LINE[selected] ?? vehicle.name) : vehicle.name;
 
   return (
     <div className={`screen ${styles.screen}`}>
@@ -124,26 +133,38 @@ export function TrucksActivity({ onExit }: Props) {
         onBack={onExit}
         holdBack
       />
-      <div className={`${styles.yard} ${styles[kind]} ${acting ? styles.acting : ""}`}>
+      <div className={`${styles.yard} ${styles[kind]} ${phase}`}>
         <div className={styles.sky} />
         <Sun />
         <Clouds />
         <div className={styles.ground} />
-        {kind === "bus" && <Road />}
+        {kind === "bus" && (
+          <div className={styles.road} aria-hidden>
+            <span className={styles.lane} />
+          </div>
+        )}
         {kind === "plane" && <div className={styles.runway} aria-hidden />}
-        {kind === "trash" && <Dumpster />}
-        {dirtJob && <DirtPile moving={acting && (kind === "dozer" || kind === "dump")} />}
+        {kind === "trash" && <Dumpster empty={working || done} />}
+        {kind === "digger" && (
+          <DirtPile className={`${styles.propDirt} ${working || done ? styles.dirtScooped : ""}`} />
+        )}
+        {kind === "dump" && (working || done) && <DirtPile className={styles.dumpedPile} />}
+        {kind === "dump" && working && <FallingDirt />}
+
         <button
           key={actKey}
           type="button"
-          className={`${styles.actor} ${acting ? styles[`act_${kind}`] : styles.idle}`}
+          className={`${styles.actor} ${styles[`act_${kind}_${phase}`]}`}
           onClick={() => go(selected)}
           aria-label={vehicle.name}
         >
-          {vehicle.render("happy")}
+          <span className={kind === "plane" ? styles.face : styles.faceFlip}>
+            {vehicle.render("happy")}
+            {kind === "dozer" && <DirtPile className={styles.bladeDirt} />}
+          </span>
         </button>
       </div>
-      <p className={styles.caption}>{vehicle.name}</p>
+      <p className={styles.caption}>{caption}</p>
       <div className={styles.picker}>
         {LOT.map((v) => (
           <button
