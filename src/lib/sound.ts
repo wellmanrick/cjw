@@ -1,4 +1,5 @@
 import type { Song, SongEvent } from './songs';
+import { asset } from './asset';
 
 let ctx: AudioContext | null = null;
 let muted = false;
@@ -541,14 +542,15 @@ export function speak(text: string) {
   unlockAudio();
   const url = VOICE_CLIPS[text];
   if (url && ctx) {
-    const cached = clipBuffers.get(url);
+    const resolved = asset(url);
+    const cached = clipBuffers.get(resolved);
     if (cached) {
       startClip(cached);
       return;
     }
-    void loadClip(url).then((buf) => {
+    void loadClip(resolved).then((buf) => {
       if (!buf) return;
-      clipBuffers.set(url, buf);
+      clipBuffers.set(resolved, buf);
       startClip(buf);
     });
     return;
@@ -566,9 +568,10 @@ export function preloadVoices() {
   if (typeof window === "undefined") return;
   unlockAudio();
   for (const url of new Set(Object.values(VOICE_CLIPS))) {
-    if (clipBuffers.has(url)) continue;
-    void loadClip(url).then((buf) => {
-      if (buf) clipBuffers.set(url, buf);
+    const resolved = asset(url);
+    if (clipBuffers.has(resolved)) continue;
+    void loadClip(resolved).then((buf) => {
+      if (buf) clipBuffers.set(resolved, buf);
     });
   }
 }

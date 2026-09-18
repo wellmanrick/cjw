@@ -14,6 +14,7 @@ import { Toilet } from "./potty/Toilet";
 import { getBuiltinCharacter } from "./timer/characters";
 import { TimerActivity } from "./timer/TimerActivity";
 import { TrucksActivity } from "./trucks/TrucksActivity";
+import { asset } from "@/lib/asset";
 
 export interface ActivityDef {
   id: string;
@@ -149,7 +150,7 @@ function FindIcon() {
 function BookIcon() {
   return (
     <img
-      src="/photos/bb-conrad.jpg"
+      src={asset("/photos/bb-conrad.jpg")}
       alt=""
       width={100}
       height={100}

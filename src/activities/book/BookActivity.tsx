@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ActivityHeader } from "@/components/ActivityHeader";
 import { speak, setMuted as setSoundMuted, unlockAudio } from "@/lib/sound";
+import { asset } from "@/lib/asset";
 import { useSettings } from "@/lib/useSettings";
 import { useWakeLock } from "@/lib/useWakeLock";
 import styles from "./book.module.css";
@@ -81,7 +82,7 @@ export function BookActivity({ onExit }: Props) {
     const prev = PAGES[(page - 1 + PAGES.length) % PAGES.length];
     for (const src of [next.src, prev.src]) {
       const img = new Image();
-      img.src = src;
+      img.src = asset(src);
     }
     return () => window.clearTimeout(t);
   }, [page, current.line]);
@@ -107,7 +108,7 @@ export function BookActivity({ onExit }: Props) {
         <div className={styles.frame}>
           <img
             key={current.src}
-            src={current.src}
+            src={asset(current.src)}
             alt={current.line}
             draggable={false}
             className={styles.photo}
