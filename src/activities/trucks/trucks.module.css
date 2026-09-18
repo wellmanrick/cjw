@@ -6,30 +6,55 @@
   width: 100%;
 }
 
-.hint {
-  margin: 0;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--color-text-soft);
-  text-align: center;
-}
-
 .yard {
   position: relative;
   flex: 1;
-  min-height: 240px;
+  min-height: 260px;
   width: 100%;
   overflow: hidden;
   border-radius: 28px;
-  border: 4px solid #5b4238;
-  background: #cfeaf4;
+  border: 3px solid #5b4238;
+  background: #cfe8f4;
   box-shadow: 0 5px 0 rgba(91, 66, 56, 0.14);
 }
 
 .sky {
   position: absolute;
-  inset: 0 0 38% 0;
-  background: #d8eef8;
+  inset: 0 0 36% 0;
+  background: linear-gradient(#bfe4f4, #e7f6fb);
+}
+
+.sun {
+  position: absolute;
+  top: 8%;
+  right: 10%;
+  width: 56px;
+  height: 56px;
+  z-index: 1;
+}
+
+.clouds {
+  position: absolute;
+  top: 6%;
+  left: 0;
+  width: 100%;
+  height: 22%;
+  z-index: 1;
+  overflow: visible;
+}
+
+.cloudDrift {
+  animation: drift 28s linear infinite;
+}
+
+.cloudDriftSlow {
+  animation: drift 40s linear infinite reverse;
+}
+
+@keyframes drift {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(12px); }
+  100% { transform: translateX(0); }
 }
 
 .ground {
@@ -37,122 +62,173 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 42%;
-  background: #cbb089;
+  height: 38%;
+  background: #d2b48c;
   border-top: 3px solid #5b4238;
 }
 
 .trash .ground,
 .bus .ground {
-  background: #9aa8b2;
+  background: #9aa3ad;
 }
 
 .plane .ground {
-  background: #7fad6e;
+  background: #8fbf73;
 }
 
-.dumpster {
+.road {
   position: absolute;
-  right: 10%;
-  bottom: 28%;
-  width: 22%;
-  height: 22%;
-  background: #6fbf73;
-  border: 3px solid #5b4238;
-  border-radius: 8px 8px 4px 4px;
+  left: 0;
+  right: 0;
+  bottom: 10%;
+  height: 18%;
+  background: #6f7780;
+  border-top: 3px solid #5b4238;
+  border-bottom: 3px solid #5b4238;
+  z-index: 1;
 }
 
-.dirt {
+.lane {
   position: absolute;
-  right: 12%;
-  bottom: 30%;
-  width: 24%;
-  height: 16%;
-  background: #a47148;
+  left: 4%;
+  right: 4%;
+  top: 50%;
+  height: 0;
+  border-top: 4px dashed #ffd166;
+  transform: translateY(-2px);
+}
+
+.runway {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 18%;
+  height: 10%;
+  background: #c5ccd3;
   border: 3px solid #5b4238;
-  border-radius: 50% 50% 40% 40%;
-  transition: transform 2.4s ease-in-out;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.propDumpster {
+  position: absolute;
+  right: 4%;
+  bottom: 16%;
+  width: 20%;
+  max-width: 108px;
+  z-index: 2;
+}
+
+.propDirt {
+  position: absolute;
+  right: 6%;
+  bottom: 24%;
+  width: 32%;
+  max-width: 160px;
+  z-index: 2;
+  transition: transform 2.6s ease-in-out;
 }
 
 .dirtMove {
-  transform: translateX(18%);
+  transform: translateX(22%);
 }
 
 .actor {
   position: absolute;
-  left: 18%;
-  bottom: 8%;
-  width: 46%;
+  left: 8%;
+  bottom: 5%;
+  width: 44%;
   max-width: 220px;
-  z-index: 2;
+  z-index: 3;
+  background: transparent;
+  padding: 0;
+}
+
+.idle {
+  animation: idleBob 3.2s ease-in-out infinite;
+}
+
+@keyframes idleBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
 
 .act_trash {
-  animation: reverseTruck 3s ease-in-out;
+  animation: reverseTruck 2.8s ease-in-out forwards;
 }
 
 .act_digger {
-  animation: scoop 2.8s ease-in-out;
+  animation: scoop 2.8s ease-in-out forwards;
 }
 
 .act_dozer {
-  animation: push 2.8s ease-in-out;
+  animation: push 2.8s ease-in-out forwards;
 }
 
 .act_dump {
-  animation: settle 2.8s ease-in-out;
+  animation: settle 2.8s ease-in-out forwards;
 }
 
 .act_dump :global(.dumpBed) {
   transform-box: fill-box;
   transform-origin: 20% 80%;
-  animation: tipBed 2.8s ease-in-out;
+  animation: tipBed 2.8s ease-in-out forwards;
 }
 
 .act_plane {
-  animation: fly 3.2s ease-in-out;
+  animation: fly 3.2s ease-in-out forwards;
 }
 
 .act_bus {
-  animation: roll 3s ease-in-out;
+  animation: roll 3s ease-in-out forwards;
 }
 
 @keyframes reverseTruck {
   0% { transform: translateX(0); }
-  30% { transform: translateX(10%); }
-  100% { transform: translateX(42%); }
+  28% { transform: translateX(8%); }
+  100% { transform: translateX(38%); }
 }
 
 @keyframes scoop {
-  0%, 100% { transform: translateY(0); }
-  40% { transform: translateY(6%); }
-  70% { transform: translateY(-4%); }
+  0%, 100% { transform: translate(0, 0); }
+  35% { transform: translate(8%, 8%); }
+  65% { transform: translate(8%, -6%); }
 }
 
 @keyframes push {
   0% { transform: translateX(0); }
-  100% { transform: translateX(28%); }
+  100% { transform: translateX(30%); }
 }
 
 @keyframes settle {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4%); }
+  50% { transform: translateY(5%); }
 }
 
 @keyframes tipBed {
-  0%, 15% { transform: rotate(0deg); }
-  45%, 70% { transform: rotate(-26deg); }
+  0%, 12% { transform: rotate(0deg); }
+  40%, 72% { transform: rotate(-28deg); }
   100% { transform: rotate(0deg); }
 }
 
 @keyframes fly {
   0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(55%, -70%) scale(0.7); }
+  55% { transform: translate(28%, -52%) scale(0.82); }
+  100% { transform: translate(42%, -22%) scale(0.78); }
 }
 
 @keyframes roll {
   0% { transform: translateX(0); }
-  100% { transform: translateX(48%); }
+  100% { transform: translateX(46%); }
+}
+
+.caption {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.1;
 }
 
 .picker {
@@ -160,21 +236,28 @@
   gap: 8px;
   width: 100%;
   justify-content: center;
+  padding-bottom: 4px;
 }
 
 .pick {
   flex: 1;
   min-width: 0;
-  max-width: 72px;
+  max-width: 76px;
   aspect-ratio: 1;
   padding: 4px;
-  border-radius: 18px;
+  border-radius: 20px;
   border: 3px solid #5b4238;
   background: #fffdf8;
   box-shadow: 0 3px 0 rgba(91, 66, 56, 0.14);
+  transition: transform 150ms ease-out, background 150ms ease-out;
+}
+
+.pick:active {
+  transform: scale(0.96);
 }
 
 .pickOn {
   background: #fff3c4;
-  transform: translateY(-2px);
+  box-shadow: 0 5px 0 rgba(91, 66, 56, 0.16);
+  transform: translateY(-3px);
 }

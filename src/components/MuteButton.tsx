@@ -12,7 +12,7 @@ export function MuteButton({ muted, onToggle, className }: Props) {
     <button
       type="button"
       className={cn(
-        "flex size-16 items-center justify-center rounded-full bg-paper text-ink shadow-[0_2px_6px_var(--color-shadow)] transition-transform duration-150 ease-out active:scale-[0.96]",
+        "flex size-16 items-center justify-center rounded-full bg-paper text-ink border-[3px] border-[#5b4238] shadow-[0_3px_0_rgba(91,66,56,0.16)] transition-transform duration-150 ease-out active:scale-[0.96]",
         className,
       )}
       onClick={onToggle}

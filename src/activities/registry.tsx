@@ -148,11 +148,13 @@ function FindIcon() {
 
 function BookIcon() {
   return (
-    <svg viewBox="0 0 100 100" width="100%" height="100%">
-      <path d="M 16 22 L 50 28 L 50 84 L 16 78 Z" fill="#f582ae" stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
-      <path d="M 84 22 L 50 28 L 50 84 L 84 78 Z" fill="#fffdf8" stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
-      <rect x="58" y="44" width="18" height="12" rx="2" fill="#ffb703" stroke={INK} strokeWidth="1.8" />
-    </svg>
+    <img
+      src="/photos/bb-conrad.jpg"
+      alt=""
+      width={100}
+      height={100}
+      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 28%", borderRadius: 18 }}
+    />
   );
 }
 
@@ -164,9 +166,9 @@ export const activities: ActivityDef[] = [
     icon: getBuiltinCharacter("builtin:trash").render("happy"),
     Component: TrucksActivity,
   },
+  { id: "book", title: "Vermont", color: "#fde4ef", icon: <BookIcon />, Component: BookActivity },
   { id: "match", title: "Match", color: "#d7f3f8", icon: <MatchIcon />, Component: MatchActivity },
   { id: "find", title: "Find", color: "#e4f5d8", icon: <FindIcon />, Component: FindActivity },
-  { id: "book", title: "Book", color: "#fde4ef", icon: <BookIcon />, Component: BookActivity },
   { id: "timer", title: "Timer", color: "#fde0d8", icon: <ClockIcon />, Component: TimerActivity },
   { id: "peekaboo", title: "Peekaboo", color: "#fde4ef", icon: <PeekIcon />, Component: PeekabooActivity },
   { id: "phone", title: "Phone", color: "#dce8f8", icon: <PhoneIcon />, Component: PhoneActivity },

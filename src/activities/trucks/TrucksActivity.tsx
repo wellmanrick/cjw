@@ -10,6 +10,8 @@ interface Props {
   onExit: () => void;
 }
 
+const INK = "#5b4238";
+
 const KIND_BY_ID: Record<string, VehicleKind> = {
   "builtin:trash": "trash",
   "builtin:digger": "digger",
@@ -30,6 +32,64 @@ const JOB_LINE: Record<string, string> = {
 
 const LOT = VEHICLE_IDS.map((id) => getBuiltinCharacter(id));
 
+function Clouds() {
+  return (
+    <svg className={styles.clouds} viewBox="0 0 400 80" aria-hidden>
+      <g fill="#fff" stroke={INK} strokeWidth="3" strokeLinejoin="round">
+        <g className={styles.cloudDrift}>
+          <ellipse cx="70" cy="38" rx="28" ry="16" />
+          <ellipse cx="92" cy="34" rx="22" ry="14" />
+          <ellipse cx="50" cy="36" rx="16" ry="11" />
+        </g>
+        <g className={styles.cloudDriftSlow}>
+          <ellipse cx="310" cy="28" rx="24" ry="14" />
+          <ellipse cx="330" cy="26" rx="16" ry="11" />
+        </g>
+      </g>
+    </svg>
+  );
+}
+
+function Sun() {
+  return (
+    <svg className={styles.sun} viewBox="0 0 64 64" aria-hidden>
+      <circle cx="32" cy="32" r="16" fill="#ffd166" stroke={INK} strokeWidth="3" />
+      <circle cx="26" cy="26" r="5" fill="#fff3bf" opacity="0.7" />
+    </svg>
+  );
+}
+
+function Dumpster() {
+  return (
+    <svg className={styles.propDumpster} viewBox="0 0 100 90" aria-hidden>
+      <ellipse cx="50" cy="84" rx="32" ry="5" fill="rgba(61,44,41,0.14)" />
+      <path d="M 14 28 L 20 74 Q 50 82 80 74 L 86 28 Z" fill="#4f8f53" stroke={INK} strokeWidth="2.8" strokeLinejoin="round" />
+      <path d="M 22 40 h 56 M 24 52 h 52" stroke={INK} strokeWidth="2" opacity="0.22" />
+      <rect x="10" y="16" width="80" height="16" rx="5" fill="#6fbf73" stroke={INK} strokeWidth="2.6" />
+      <rect x="18" y="20" width="18" height="8" rx="2" fill="#cdeefd" stroke={INK} strokeWidth="1.6" />
+      <rect x="64" y="20" width="18" height="8" rx="2" fill="#cdeefd" stroke={INK} strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+function DirtPile({ moving }: { moving: boolean }) {
+  return (
+    <svg className={`${styles.propDirt} ${moving ? styles.dirtMove : ""}`} viewBox="0 0 120 70" aria-hidden>
+      <ellipse cx="60" cy="62" rx="48" ry="7" fill="rgba(61,44,41,0.12)" />
+      <path d="M 10 58 Q 22 18 48 22 Q 60 8 78 24 Q 102 16 110 58 Z" fill="#c4894a" stroke={INK} strokeWidth="2.8" strokeLinejoin="round" />
+      <path d="M 28 50 Q 48 30 70 48" fill="#e0a36a" stroke="none" />
+    </svg>
+  );
+}
+
+function Road() {
+  return (
+    <div className={styles.road} aria-hidden>
+      <span className={styles.lane} />
+    </div>
+  );
+}
+
 export function TrucksActivity({ onExit }: Props) {
   const { settings, update } = useSettings();
   const [selected, setSelected] = useState("builtin:trash");
@@ -48,12 +108,12 @@ export function TrucksActivity({ onExit }: Props) {
     setActing(true);
     setActKey((k) => k + 1);
     playVehicleSound(kind);
-    window.setTimeout(() => speak(JOB_LINE[id] ?? getBuiltinCharacter(id).name), 500);
-    window.setTimeout(() => setActing(false), 3200);
+    window.setTimeout(() => speak(JOB_LINE[id] ?? getBuiltinCharacter(id).name), 480);
   };
 
   const vehicle = getBuiltinCharacter(selected);
   const kind = KIND_BY_ID[selected] ?? "bus";
+  const dirtJob = kind === "digger" || kind === "dozer" || kind === "dump";
 
   return (
     <div className={`screen ${styles.screen}`}>
@@ -64,23 +124,26 @@ export function TrucksActivity({ onExit }: Props) {
         onBack={onExit}
         holdBack
       />
-      <p className={styles.hint}>Tap a truck. Watch it work.</p>
-      <button
-        type="button"
-        className={`${styles.yard} ${styles[kind]} ${acting ? styles.acting : ""}`}
-        onClick={() => go(selected)}
-        aria-label={vehicle.name}
-      >
+      <div className={`${styles.yard} ${styles[kind]} ${acting ? styles.acting : ""}`}>
         <div className={styles.sky} />
+        <Sun />
+        <Clouds />
         <div className={styles.ground} />
-        {(kind === "digger" || kind === "dozer" || kind === "dump") && (
-          <div className={`${styles.dirt} ${acting ? styles.dirtMove : ""}`} />
-        )}
-        {kind === "trash" && <div className={styles.dumpster} />}
-        <div key={actKey} className={`${styles.actor} ${acting ? styles[`act_${kind}`] : ""}`}>
+        {kind === "bus" && <Road />}
+        {kind === "plane" && <div className={styles.runway} aria-hidden />}
+        {kind === "trash" && <Dumpster />}
+        {dirtJob && <DirtPile moving={acting && (kind === "dozer" || kind === "dump")} />}
+        <button
+          key={actKey}
+          type="button"
+          className={`${styles.actor} ${acting ? styles[`act_${kind}`] : styles.idle}`}
+          onClick={() => go(selected)}
+          aria-label={vehicle.name}
+        >
           {vehicle.render("happy")}
-        </div>
-      </button>
+        </button>
+      </div>
+      <p className={styles.caption}>{vehicle.name}</p>
       <div className={styles.picker}>
         {LOT.map((v) => (
           <button
@@ -89,6 +152,7 @@ export function TrucksActivity({ onExit }: Props) {
             className={`${styles.pick} ${selected === v.id ? styles.pickOn : ""}`}
             onClick={() => go(v.id)}
             aria-label={v.name}
+            aria-pressed={selected === v.id}
           >
             {v.render("happy")}
           </button>

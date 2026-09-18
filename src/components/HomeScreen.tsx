@@ -1,4 +1,4 @@
-import { activities } from "../activities/registry";
+import { activities } from "@/activities/registry";
 import styles from "./components.module.css";
 
 interface Props {

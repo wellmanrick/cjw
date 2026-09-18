@@ -16,14 +16,12 @@ export function ActivityHeader({ title, muted, onToggleMute, onBack, holdBack = 
   return (
     <header className="flex w-full items-center justify-between gap-3">
       {holdBack ? (
-        <HoldButton onHoldComplete={onBack} className="min-h-12 min-w-24 px-4 text-sm">
-          Hold to leave
-        </HoldButton>
+        <HoldButton onHoldComplete={onBack}>Hold to leave</HoldButton>
       ) : (
         <button
           type="button"
           className={cn(
-            "flex size-16 items-center justify-center rounded-full bg-paper text-ink shadow-[0_2px_6px_var(--color-shadow)] transition-transform duration-150 ease-out active:scale-[0.96]",
+            "flex size-16 items-center justify-center rounded-full bg-paper text-ink border-[3px] border-[#5b4238] shadow-[0_3px_0_rgba(91,66,56,0.16)] transition-transform duration-150 ease-out active:scale-[0.96]",
           )}
           onClick={onBack}
           aria-label="Back"
@@ -31,7 +29,7 @@ export function ActivityHeader({ title, muted, onToggleMute, onBack, holdBack = 
           <ArrowLeft className="size-7" strokeWidth={2.6} />
         </button>
       )}
-      <h1 className="m-0 flex-1 text-center text-2xl font-semibold leading-tight text-blush-dark">{title}</h1>
+      <h1 className="m-0 flex-1 text-center text-[1.55rem] font-bold leading-tight text-ink">{title}</h1>
       <MuteButton muted={muted} onToggle={onToggleMute} />
     </header>
   );
