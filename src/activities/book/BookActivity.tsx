@@ -1,3 +1,16 @@
+import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ActivityHeader } from "@/components/ActivityHeader";
+import { speak, setMuted as setSoundMuted, unlockAudio } from "@/lib/sound";
+import { asset } from "@/lib/asset";
+import { useSettings } from "@/lib/useSettings";
+import { useWakeLock } from "@/lib/useWakeLock";
+import styles from "./book.module.css";
+
+interface Props {
+  onExit: () => void;
+}
+
 export const PAGES = [
   { src: "/photos/bb-conrad.jpg", line: "This is Conrad. He is two years old, and this is his story.", pos: "center 22%" },
   { src: "/photos/bb-charlie.jpg", line: "Baby Charlie is six months old. He is Conrad's little brother.", pos: "center 28%" },
@@ -51,3 +64,96 @@ export const PAGES = [
   { src: "/photos/bb-bye.jpg", line: "Bye-bye, Vermont. We will see you soon.", pos: "center 22%" },
   { src: "/photos/mountains.jpg", line: "We love Vermont, and Vermont loves us too.", pos: "center 40%" },
 ] as const;
+
+export function BookActivity({ onExit }: Props) {
+  const { settings, update } = useSettings();
+  const [page, setPage] = useState(0);
+  useWakeLock(true);
+  const current = PAGES[page];
+
+  useEffect(() => {
+    setSoundMuted(settings.muted);
+  }, [settings.muted]);
+
+  useEffect(() => {
+    unlockAudio();
+    const t = window.setTimeout(() => speak(current.line), 280);
+    const next = PAGES[(page + 1) % PAGES.length];
+    const prev = PAGES[(page - 1 + PAGES.length) % PAGES.length];
+    for (const src of [next.src, prev.src]) {
+      const img = new Image();
+      img.src = asset(src);
+    }
+    return () => window.clearTimeout(t);
+  }, [page, current.line]);
+
+  const go = (dir: 1 | -1) => {
+    unlockAudio();
+    setPage((p) => Math.min(PAGES.length - 1, Math.max(0, p + dir)));
+  };
+
+  const atStart = page === 0;
+  const atEnd = page === PAGES.length - 1;
+
+  return (
+    <div className={`screen ${styles.screen}`}>
+      <ActivityHeader
+        title="Vermont"
+        muted={settings.muted}
+        onToggleMute={() => update({ muted: !settings.muted })}
+        onBack={onExit}
+        holdBack
+      />
+      <div className={styles.page}>
+        <div className={styles.frame}>
+          <img
+            key={current.src}
+            src={asset(current.src)}
+            alt={current.line}
+            draggable={false}
+            className={styles.photo}
+            style={{ objectPosition: current.pos }}
+          />
+          <button
+            type="button"
+            className={`${styles.hot} ${styles.hotBack}`}
+            onClick={() => go(-1)}
+            disabled={atStart}
+            aria-label="Previous page"
+          />
+          <button
+            type="button"
+            className={`${styles.hot} ${styles.hotNext}`}
+            onClick={() => go(1)}
+            disabled={atEnd}
+            aria-label="Next page"
+          />
+        </div>
+        <p className={styles.line}>{current.line}</p>
+        <div className={styles.nav}>
+          <button
+            type="button"
+            className={styles.navBtn}
+            onClick={() => go(-1)}
+            disabled={atStart}
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="size-8" strokeWidth={2.8} />
+          </button>
+          <p className={styles.pageNum}>
+            {page + 1} / {PAGES.length}
+          </p>
+          <button
+            type="button"
+            className={styles.navBtn}
+            onClick={() => go(1)}
+            disabled={atEnd}
+            aria-label="Next page"
+          >
+            <ChevronRight className="size-8" strokeWidth={2.8} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
