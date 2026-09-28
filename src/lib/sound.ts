@@ -504,6 +504,18 @@ const VOICE_CLIPS: Record<string, string> = {
   "Goodnight, Charlie. Sleep tight, little baby.": "/voice/book/p49.mp3",
   "Bye-bye, Vermont. We will see you soon.": "/voice/book/p50.mp3",
   "We love Vermont, and Vermont loves us too.": "/voice/book/p51.mp3",
+  "This is Conrad. He is two years old, and this is his Boston story.": "/voice/boston/p01.mp3",
+  "This is cousin Declan. He is fifteen, and he loves Boston.": "/voice/boston/p03.mp3",
+  "Hello, Boston. The tall buildings shine by the water.": "/voice/boston/p06.mp3",
+  "The T train rumbles along. Conrad says choo choo.": "/voice/boston/p07.mp3",
+  "They walk on the old red bricks. Tap, tap, tap.": "/voice/boston/p08.mp3",
+  "The duck boat drives on the street, then splashes into the river.": "/voice/boston/p09.mp3",
+  "Conrad and Declan ride a swan boat on the lagoon.": "/voice/boston/p10.mp3",
+  "Look. The duckling statues wait in a little line.": "/voice/boston/p11.mp3",
+  "Albert and Henry run on the grass at the Common.": "/voice/boston/p12.mp3",
+  "Conrad dips his toes in the Frog Pond. It is cool.": "/voice/boston/p13.mp3",
+  "A big red fire truck rolls by. Woo woo.": "/voice/boston/p14.mp3",
+  "Bye-bye, Boston. We will see you soon.": "/voice/boston/p18.mp3",
 };
 
 const clipBuffers = new Map<string, AudioBuffer>();
