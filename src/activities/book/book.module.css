@@ -97,6 +97,11 @@
   animation: pageIn 240ms ease-out;
 }
 
+.spritePhoto {
+  background-repeat: no-repeat;
+  background-color: #1d3340;
+}
+
 @keyframes pageIn {
   from {
     opacity: 0.55;
