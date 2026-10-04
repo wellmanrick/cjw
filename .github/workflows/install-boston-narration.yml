@@ -1,0 +1,87 @@
+name: Install Boston narration
+
+on:
+  push:
+    branches:
+      - boston-voice-28
+
+permissions:
+  contents: write
+
+jobs:
+  install-narration:
+    if: ${{ !contains(github.event.head_commit.message, '[voice-assets]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download final narration
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/voice/boston
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/1ea1c97f-e9b4-4d0b-ad3d-44594b3f591f/Boston_Final_Niki_p01.mp3' --output 'public/voice/boston/p01.mp3'
+          test "$(wc -c < 'public/voice/boston/p01.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/061b514e-4667-4923-9689-d03949b72f0b/Boston_Final_Niki_p02.mp3' --output 'public/voice/boston/p02.mp3'
+          test "$(wc -c < 'public/voice/boston/p02.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/561f6b0e-6b32-48bc-ab37-35de9a4b971d/Boston_Final_Niki_p03.mp3' --output 'public/voice/boston/p03.mp3'
+          test "$(wc -c < 'public/voice/boston/p03.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/4e94b9c1-f317-4579-867b-e6e44d1ade33/Boston_Final_Niki_p04.mp3' --output 'public/voice/boston/p04.mp3'
+          test "$(wc -c < 'public/voice/boston/p04.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/231783ff-498c-4047-a66f-ed9f3b6f15f5/Boston_Final_Niki_p05.mp3' --output 'public/voice/boston/p05.mp3'
+          test "$(wc -c < 'public/voice/boston/p05.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/16568170-4226-4e92-aaf5-03cdf4651d6c/Boston_Final_Niki_p06.mp3' --output 'public/voice/boston/p06.mp3'
+          test "$(wc -c < 'public/voice/boston/p06.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/b0c0d38e-22d4-4054-a9eb-3bbb4a499468/Boston_Final_Niki_p07.mp3' --output 'public/voice/boston/p07.mp3'
+          test "$(wc -c < 'public/voice/boston/p07.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/6b22ae0f-ebd8-4221-ae45-72a68a67bd62/Boston_Final_Niki_p08.mp3' --output 'public/voice/boston/p08.mp3'
+          test "$(wc -c < 'public/voice/boston/p08.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/cddb8aec-79ca-4a0b-98b1-b10b0b4ad7f5/Boston_Final_Niki_p09.mp3' --output 'public/voice/boston/p09.mp3'
+          test "$(wc -c < 'public/voice/boston/p09.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/09516173-2203-4821-868d-7d71fc1960c0/Boston_Final_Niki_p10.mp3' --output 'public/voice/boston/p10.mp3'
+          test "$(wc -c < 'public/voice/boston/p10.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/3973727a-2cde-4ad5-963d-4e0c3ee71165/Boston_Final_Niki_p11.mp3' --output 'public/voice/boston/p11.mp3'
+          test "$(wc -c < 'public/voice/boston/p11.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/d21970cc-f12d-4daf-8b4e-6c2d10576f74/Boston_Final_Niki_p12.mp3' --output 'public/voice/boston/p12.mp3'
+          test "$(wc -c < 'public/voice/boston/p12.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/ea2e43c5-d786-43b9-b25a-1fad832aef64/Boston_Final_Niki_p13.mp3' --output 'public/voice/boston/p13.mp3'
+          test "$(wc -c < 'public/voice/boston/p13.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/89b08964-32d8-4d1f-a850-cfdda5ba0bc4/Boston_Final_Niki_p14.mp3' --output 'public/voice/boston/p14.mp3'
+          test "$(wc -c < 'public/voice/boston/p14.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/69b42eee-efba-44ee-981b-d24bd017de4a/Boston_Final_Niki_p15.mp3' --output 'public/voice/boston/p15.mp3'
+          test "$(wc -c < 'public/voice/boston/p15.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/3ec7269e-a741-4f02-9890-05f3d4145e77/Boston_Final_Niki_p16.mp3' --output 'public/voice/boston/p16.mp3'
+          test "$(wc -c < 'public/voice/boston/p16.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/db41230e-519d-4c50-8c3c-e9648276daa2/Boston_Final_Niki_p17.mp3' --output 'public/voice/boston/p17.mp3'
+          test "$(wc -c < 'public/voice/boston/p17.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/ba8af358-560f-4344-8541-e24e05a4bb16/Boston_Final_Niki_p18.mp3' --output 'public/voice/boston/p18.mp3'
+          test "$(wc -c < 'public/voice/boston/p18.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/7888d941-08df-4589-b39e-daeb345eee5c/Boston_Final_Niki_p19.mp3' --output 'public/voice/boston/p19.mp3'
+          test "$(wc -c < 'public/voice/boston/p19.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/76fb1f00-3536-450c-a61f-43d6c7f34302/Boston_Final_Niki_p20.mp3' --output 'public/voice/boston/p20.mp3'
+          test "$(wc -c < 'public/voice/boston/p20.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/650755f4-921d-4f21-9c10-ce69c8e005d3/Boston_Final_Niki_p21.mp3' --output 'public/voice/boston/p21.mp3'
+          test "$(wc -c < 'public/voice/boston/p21.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/9f372aa0-89fc-483c-a8d7-f37434b229ae/Boston_Final_Niki_p22.mp3' --output 'public/voice/boston/p22.mp3'
+          test "$(wc -c < 'public/voice/boston/p22.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/5e7ee268-b60d-45d5-9e4a-5bbb01f45e79/Boston_Final_Niki_p23.mp3' --output 'public/voice/boston/p23.mp3'
+          test "$(wc -c < 'public/voice/boston/p23.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/0517c6cb-e2e8-4d51-983b-186bc295b117/Boston_Final_Niki_p24.mp3' --output 'public/voice/boston/p24.mp3'
+          test "$(wc -c < 'public/voice/boston/p24.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/62a62e6b-4003-4d78-b3fe-d8aa9c339ec6/Boston_Final_Niki_p25.mp3' --output 'public/voice/boston/p25.mp3'
+          test "$(wc -c < 'public/voice/boston/p25.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/b36afd21-13bf-4569-aef9-850a8236020a/Boston_Final_Niki_p26.mp3' --output 'public/voice/boston/p26.mp3'
+          test "$(wc -c < 'public/voice/boston/p26.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/a93c0dc5-6d0f-4104-92b8-623309d46fe5/Boston_Final_Niki_p27.mp3' --output 'public/voice/boston/p27.mp3'
+          test "$(wc -c < 'public/voice/boston/p27.mp3')" -gt 1000
+          curl --fail --location --silent --show-error 'https://dnznrvs05pmza.cloudfront.net/text_to_speech/7a93c2c2-220b-42ad-8480-64266ffd1032/Boston_Final_Niki_p28.mp3' --output 'public/voice/boston/p28.mp3'
+          test "$(wc -c < 'public/voice/boston/p28.mp3')" -gt 1000
+      - name: Commit narration assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/install-boston-narration.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/voice/boston src/lib/sound.ts .github/workflows/install-boston-narration.yml
+          git commit -m "Install final Niki Boston narration [voice-assets]"
+          git push
