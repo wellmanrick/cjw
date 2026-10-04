@@ -7,10 +7,20 @@ import { useSettings } from "@/lib/useSettings";
 import { useWakeLock } from "@/lib/useWakeLock";
 import styles from "./book.module.css";
 
+export type SpritePosition = {
+  col: number;
+  row: number;
+  cols: number;
+  rows: number;
+  cellWidth: number;
+  cellHeight: number;
+};
+
 export type BookPage = {
   src: string;
   line: string;
   pos: string;
+  sprite?: SpritePosition;
 };
 
 interface Props {
@@ -19,11 +29,17 @@ interface Props {
   onExit: () => void;
 }
 
+function resolveBookAsset(src: string) {
+  if (/^(?:data:|blob:|https?:\/\/)/.test(src)) return src;
+  return asset(src);
+}
+
 export function PictureBook({ title, pages, onExit }: Props) {
   const { settings, update } = useSettings();
   const [page, setPage] = useState(0);
   useWakeLock(true);
   const current = pages[page];
+  const currentSrc = resolveBookAsset(current.src);
 
   useEffect(() => {
     setSoundMuted(settings.muted);
@@ -34,12 +50,16 @@ export function PictureBook({ title, pages, onExit }: Props) {
     const t = window.setTimeout(() => speak(current.line), 280);
     const next = pages[(page + 1) % pages.length];
     const prev = pages[(page - 1 + pages.length) % pages.length];
-    for (const src of [next.src, prev.src]) {
+
+    for (const neighbor of [next, prev]) {
+      const src = resolveBookAsset(neighbor.src);
+      if (src === currentSrc) continue;
       const img = new Image();
-      img.src = asset(src);
+      img.src = src;
     }
+
     return () => window.clearTimeout(t);
-  }, [page, current.line, pages]);
+  }, [page, current.line, currentSrc, pages]);
 
   const go = (dir: 1 | -1) => {
     unlockAudio();
@@ -60,14 +80,31 @@ export function PictureBook({ title, pages, onExit }: Props) {
       />
       <div className={styles.page}>
         <div className={styles.frame}>
-          <img
-            key={current.src}
-            src={asset(current.src)}
-            alt={current.line}
-            draggable={false}
-            className={styles.photo}
-            style={{ objectPosition: current.pos }}
-          />
+          {current.sprite ? (
+            <svg
+              key={`sprite-${page}`}
+              role="img"
+              aria-label={current.line}
+              className={`${styles.photo} ${styles.spritePhoto}`}
+              viewBox={`${current.sprite.col * current.sprite.cellWidth} ${current.sprite.row * current.sprite.cellHeight} ${current.sprite.cellWidth} ${current.sprite.cellHeight}`}
+              preserveAspectRatio="xMidYMid slice"
+            >
+              <image
+                href={currentSrc}
+                width={current.sprite.cols * current.sprite.cellWidth}
+                height={current.sprite.rows * current.sprite.cellHeight}
+              />
+            </svg>
+          ) : (
+            <img
+              key={current.src}
+              src={currentSrc}
+              alt={current.line}
+              draggable={false}
+              className={styles.photo}
+              style={{ objectPosition: current.pos }}
+            />
+          )}
           <button
             type="button"
             className={`${styles.hot} ${styles.hotBack}`}

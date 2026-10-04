@@ -1,28 +1,60 @@
-import { PictureBook } from "./PictureBook";
+import { PictureBook, type BookPage } from "./PictureBook";
+import { BOSTON_SPRITE } from "./bostonSprite";
 
 interface Props {
   onExit: () => void;
 }
 
+const COLS = 4;
+const ROWS = 7;
+const CELL_WIDTH = 320;
+const CELL_HEIGHT = 400;
+
+function page(index: number, line: string): BookPage {
+  return {
+    src: BOSTON_SPRITE,
+    line,
+    pos: "center 40%",
+    sprite: {
+      col: index % COLS,
+      row: Math.floor(index / COLS),
+      cols: COLS,
+      rows: ROWS,
+      cellWidth: CELL_WIDTH,
+      cellHeight: CELL_HEIGHT,
+    },
+  };
+}
+
 export const BOSTON_PAGES = [
-  { src: "/photos/bb-conrad.jpg", line: "This is Conrad. He is two years old, and this is his Boston story.", pos: "center 22%" },
-  { src: "/photos/bb-charlie.jpg", line: "Baby Charlie is six months old. He is Conrad's little brother.", pos: "center 28%" },
-  { src: "/photos/bb-declan.jpg", line: "This is cousin Declan. He is fifteen, and he loves Boston.", pos: "center 20%" },
-  { src: "/photos/albert.jpg", line: "Here is Albert, the brown and white dog. He is a good friend.", pos: "center 40%" },
-  { src: "/photos/henry.jpg", line: "And here is Henry, the white and brown dog. He likes to run.", pos: "center 28%" },
-  { src: "/photos/bos-sky.jpg", line: "Hello, Boston. The tall buildings shine by the water.", pos: "center 40%" },
-  { src: "/photos/bos-t.jpg", line: "The T train rumbles along. Conrad says choo choo.", pos: "center 40%" },
-  { src: "/photos/bos-bricks.jpg", line: "They walk on the old red bricks. Tap, tap, tap.", pos: "center 40%" },
-  { src: "/photos/bos-duckboat.jpg", line: "The duck boat drives on the street, then splashes into the river.", pos: "center 40%" },
-  { src: "/photos/bos-swan.jpg", line: "Conrad and Declan ride a swan boat on the lagoon.", pos: "center 40%" },
-  { src: "/photos/bos-ducklings.jpg", line: "Look. The duckling statues wait in a little line.", pos: "center 40%" },
-  { src: "/photos/bos-common.jpg", line: "Albert and Henry run on the grass at the Common.", pos: "center 40%" },
-  { src: "/photos/bos-frog.jpg", line: "Conrad dips his toes in the Frog Pond. It is cool.", pos: "center 40%" },
-  { src: "/photos/bos-fire.jpg", line: "A big red fire truck rolls by. Woo woo.", pos: "center 40%" },
-  { src: "/photos/stories.jpg", line: "Declan sits down and reads everyone a story.", pos: "center 40%" },
-  { src: "/photos/sleepy.jpg", line: "Albert and Henry are sleepy after a long day.", pos: "center 40%" },
-  { src: "/photos/bb-bed.jpg", line: "Goodnight, Charlie. Sleep tight, little baby.", pos: "center 22%" },
-  { src: "/photos/bb-bye.jpg", line: "Bye-bye, Boston. We will see you soon.", pos: "center 22%" },
+  page(0, "This is Conrad. He is two years old, and Boston is home."),
+  page(1, "Baby Charlie is Conrad's little brother. He comes along for the ride."),
+  page(2, "Cousin Declan is fifteen. He loves exploring Boston with them."),
+  page(3, "Albert trots beside the Charles. Sailboats glide by."),
+  page(4, "Henry is happy in the Public Garden. What a good boy."),
+  page(5, "Hello, Boston! The tall buildings shine across the water."),
+  page(6, "Ding, ding! Here comes the Green Line. Conrad waves at the T."),
+  page(7, "Tap, tap, tap. Conrad walks the old red bricks with Albert and Henry."),
+  page(8, "Splash! The Duck Boat rolls off the street and into the river."),
+  page(9, "The Swan Boat glides across the lagoon. Everyone rides together."),
+  page(10, "Quack, quack! Conrad finds the little ducklings in the Public Garden."),
+  page(11, "They cross Boston Common together. There is so much to see."),
+  page(12, "Splash, splash! Conrad and Charlie cool off at the Frog Pond."),
+  page(13, "At the Celtics game, the crowd is loud and green. Go, Celtics, go!"),
+  page(14, "At the Bruins game, skates zip across the ice. Go, Bruins!"),
+  page(15, "At the Patriots game, everybody cheers. Touchdown!"),
+  page(16, "Now they are back in the South End, where home is."),
+  page(17, "Charlie rolls past the South End brownstones in his stroller."),
+  page(18, "Declan pushes Charlie while Conrad walks beside them. Tap, tap, down the bricks."),
+  page(19, "Albert and Henry know these South End streets too. They trot right along."),
+  page(20, "Conrad climbs high at the neighborhood playground. Up, up, up!"),
+  page(21, "At the South End market, flowers and pictures fill the street."),
+  page(22, "Time for a little snack. Conrad has a croissant while Charlie watches."),
+  page(23, "They walk through a quiet South End garden with flowers and a fountain."),
+  page(24, "The sun gets low over Boston. It has been a very big day."),
+  page(25, "Back on their South End street, everyone waves goodnight."),
+  page(26, "At home, Declan reads one more Boston story."),
+  page(27, "Albert and Henry close their eyes. Goodnight, Boston. Goodnight, home."),
 ] as const;
 
 export function BostonBook({ onExit }: Props) {
