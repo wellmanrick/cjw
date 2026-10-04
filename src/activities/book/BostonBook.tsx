@@ -7,6 +7,8 @@ interface Props {
 
 const COLS = 4;
 const ROWS = 7;
+const CELL_WIDTH = 320;
+const CELL_HEIGHT = 400;
 
 function page(index: number, line: string): BookPage {
   return {
@@ -18,6 +20,8 @@ function page(index: number, line: string): BookPage {
       row: Math.floor(index / COLS),
       cols: COLS,
       rows: ROWS,
+      cellWidth: CELL_WIDTH,
+      cellHeight: CELL_HEIGHT,
     },
   };
 }
