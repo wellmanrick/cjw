@@ -12,6 +12,8 @@ export type SpritePosition = {
   row: number;
   cols: number;
   rows: number;
+  cellWidth: number;
+  cellHeight: number;
 };
 
 export type BookPage = {
@@ -30,10 +32,6 @@ interface Props {
 function resolveBookAsset(src: string) {
   if (/^(?:data:|blob:|https?:\/\/)/.test(src)) return src;
   return asset(src);
-}
-
-function spritePercent(index: number, count: number) {
-  return count <= 1 ? 0 : (index / (count - 1)) * 100;
 }
 
 export function PictureBook({ title, pages, onExit }: Props) {
@@ -83,17 +81,20 @@ export function PictureBook({ title, pages, onExit }: Props) {
       <div className={styles.page}>
         <div className={styles.frame}>
           {current.sprite ? (
-            <div
+            <svg
               key={`sprite-${page}`}
               role="img"
               aria-label={current.line}
               className={`${styles.photo} ${styles.spritePhoto}`}
-              style={{
-                backgroundImage: `url("${currentSrc}")`,
-                backgroundSize: `${current.sprite.cols * 100}% ${current.sprite.rows * 100}%`,
-                backgroundPosition: `${spritePercent(current.sprite.col, current.sprite.cols)}% ${spritePercent(current.sprite.row, current.sprite.rows)}%`,
-              }}
-            />
+              viewBox={`${current.sprite.col * current.sprite.cellWidth} ${current.sprite.row * current.sprite.cellHeight} ${current.sprite.cellWidth} ${current.sprite.cellHeight}`}
+              preserveAspectRatio="xMidYMid slice"
+            >
+              <image
+                href={currentSrc}
+                width={current.sprite.cols * current.sprite.cellWidth}
+                height={current.sprite.rows * current.sprite.cellHeight}
+              />
+            </svg>
           ) : (
             <img
               key={current.src}
