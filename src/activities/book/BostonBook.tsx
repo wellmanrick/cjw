@@ -54,7 +54,7 @@ export const BOSTON_PAGES = [
   page(24, "The sun gets low over Boston. It has been a very big day."),
   page(25, "Back on their South End street, everyone waves goodnight."),
   page(26, "At home, Declan reads one more Boston story."),
-  page(27, "Albert and Henry close their eyes. Goodnight, Boston. Goodnight, home."),
+  page(27, "Albert and Henry close their eyes. Goodnight, Boston. We love our home."),
 ] as const;
 
 export function BostonBook({ onExit }: Props) {
