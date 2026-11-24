@@ -3,6 +3,7 @@
 import type { ComponentType, ReactNode } from "react";
 import { BookActivity } from "./book/BookActivity";
 import { BostonBook } from "./book/BostonBook";
+import { NaplesBook } from "./book/NaplesBook";
 import { BubblesActivity } from "./bubbles/BubblesActivity";
 import { ColorsActivity } from "./colors/ColorsActivity";
 import { FindActivity } from "./find/FindActivity";
@@ -172,6 +173,18 @@ function BostonIcon() {
   );
 }
 
+function NaplesIcon() {
+  return (
+    <img
+      src={asset("/photos/naples/p01.jpg")}
+      alt=""
+      width={100}
+      height={100}
+      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 28%", borderRadius: 18 }}
+    />
+  );
+}
+
 export const activities: ActivityDef[] = [
   {
     id: "trucks",
@@ -182,6 +195,7 @@ export const activities: ActivityDef[] = [
   },
   { id: "book", title: "Vermont", color: "#fde4ef", icon: <BookIcon />, Component: BookActivity },
   { id: "boston", title: "Boston", color: "#dce8f8", icon: <BostonIcon />, Component: BostonBook },
+  { id: "naples", title: "Naples", color: "#d8f4ea", icon: <NaplesIcon />, Component: NaplesBook },
   { id: "match", title: "Match", color: "#d7f3f8", icon: <MatchIcon />, Component: MatchActivity },
   { id: "find", title: "Find", color: "#e4f5d8", icon: <FindIcon />, Component: FindActivity },
   { id: "timer", title: "Timer", color: "#fde0d8", icon: <ClockIcon />, Component: TimerActivity },

@@ -21,6 +21,10 @@ Six big cards. Find two the same. No timer, no buzzers.
 Hide-and-seek behind three hills, then a calm “where’s the airplane?” scene.
 Big targets. Wrong taps do almost nothing.
 
+### Naples
+Christmas break and New Year's in warm Naples. Shorts and sun hats, the pier,
+a boat, the zoo, twinkle palms, and fireworks. Every page is read aloud.
+
 ### Book
 One vehicle per page, a short line in a real voice, tap to turn.
 
